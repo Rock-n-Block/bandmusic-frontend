@@ -2,4 +2,41 @@
 @import '@/styles/mixins';
 
 .home_wrapper {
+  padding-top: 20px;
+  width: 100%;
+  @include flex(row, flex-start, space-between);
+
+  .col {
+    max-width: 699px;
+  }
+
+  .title {
+    font-weight: 900;
+    font-size: 72px;
+    line-height: 80px;
+    margin-bottom: 32px;
+    span {
+      color: $color-accent;
+    }
+  }
+  .description {
+    font-size: 14px;
+    max-width: 492px;
+    margin-bottom: 38px;
+  }
+  .btn {
+    width: 419px;
+    padding: 23px 54px 24px;
+    color: $color-another-fucking-white-color;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 500;
+    &:first-of-type {
+      margin-bottom: 28px;
+      padding: 25px 54px 26px;
+    }
+  }
+  .home_img {
+    max-width: 476px;
+  }
 }

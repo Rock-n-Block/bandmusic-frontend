@@ -3,21 +3,34 @@
 
 .button {
   cursor: pointer;
+  text-transform: uppercase;
   text-decoration: none;
   background-color: transparent;
+  border: none;
   width: fit-content;
   white-space: nowrap;
   @include flex(row, center, center, nowrap);
-  border: 2px solid $main-color;
   box-sizing: border-box;
-  padding: 13px 28px 12px 32px;
-  @include text-control(14px, 15px, 700);
 
-  &.filled {
-    background-color: $main-color;
-    color: $white-color;
+  &.default {
+    background: $bg-btn-default;
+    border-radius: 18px;
+    border: 1px solid $border-btn-default;
+    color: $text-btn-color-white;
   }
-  &.accent {
-    background-color: $accent-color;
+
+  &.filled,&.outline {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+  }
+  &.filled {
+    background: $color-accent;
+    border-radius: 16px;
+    padding: 24px 54px;
+  }
+  &.outline {
+    border: 2px solid $color-accent;
+    border-radius: 18px;
   }
 }

@@ -4,9 +4,10 @@
 
 body {
   margin: 0;
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 14px;
+  line-height: 24px;
   color: $text-color;
 
   span,
@@ -28,6 +29,11 @@ p {
 a {
   text-decoration: none;
 }
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+a, input, textarea, button {font-family: inherit}
 
 .main_wrapper {
   position: relative;

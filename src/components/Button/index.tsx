@@ -5,7 +5,8 @@ import cn from 'classnames';
 import s from './Button.module.scss';
 
 export interface IButton {
-  color?: 'filled' | 'accent' | 'disabled';
+  color?: 'default' | 'filled' | 'outline' | 'disabled';
+  size?: 'lg' | 'sm';
   className?: string;
   onClick?: (event: never) => void;
   type?: 'button' | 'submit';
@@ -18,7 +19,8 @@ export interface IButton {
 }
 
 const Button: FC<PropsWithChildren<IButton>> = ({
-  color = '',
+  color = 'default',
+  size = 'lg',
   onClick = () => {},
   className,
   type = 'button',
@@ -44,7 +46,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
     <button
       ref={btnRef}
       type={type === 'submit' ? 'submit' : 'button'}
-      className={cn(s.button, s[color], className, {
+      className={cn(s.button, s[color], s[size], className, {
         [s.disabled]: disabled || color === 'disabled',
       })}
       onClick={onClick}

@@ -1,0 +1,7 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.header_wrapper {
+  position: sticky;
+  top: 0;
+}

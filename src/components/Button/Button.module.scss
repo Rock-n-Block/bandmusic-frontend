@@ -1,0 +1,23 @@
+@import '@/styles/mixins';
+@import '@/styles/variables';
+
+.button {
+  cursor: pointer;
+  text-decoration: none;
+  background-color: transparent;
+  width: fit-content;
+  white-space: nowrap;
+  @include flex(row, center, center, nowrap);
+  border: 2px solid $main-color;
+  box-sizing: border-box;
+  padding: 13px 28px 12px 32px;
+  @include text-control(14px, 15px, 700);
+
+  &.filled {
+    background-color: $main-color;
+    color: $white-color;
+  }
+  &.accent {
+    background-color: $accent-color;
+  }
+}

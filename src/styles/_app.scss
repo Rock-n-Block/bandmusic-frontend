@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Archivo', sans-serif;
+  font-weight: normal;
+  font-size: 16px;
+  color: $text-color;
+
+  span,
+  div {
+    font-feature-settings: 'liga' off;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main_wrapper {
+  position: relative;
+  z-index: 0;
+  min-height: 100vh;
+  background: $bg-main;
+}
+
+.page_wrapper {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 73px 0 72px;
+}

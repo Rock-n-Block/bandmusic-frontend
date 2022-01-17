@@ -3,16 +3,23 @@ import { observer } from 'mobx-react-lite';
 
 import homeImg from '@/assets/img/home.png';
 import { Button } from '@/components';
+import { SuccessModal, Vesting } from '@/containers';
+import useModal from '@/hooks/useModal';
 import { useMst } from '@/store';
 
 import s from './Home.module.scss';
-import {Vesting} from "@/containers";
 
 const Home: FC = observer(() => {
-  const [vestingTemp, setVestingTemp] = useState<boolean>(false);
+  const [vesting, setVesting] = useState<boolean>(false);
+  const [accessTokens, setAccessTokens] = useState<boolean>(false);
   const { user } = useMst();
+  const [isVisibleModal, handleOpenModal, handleCloseModal] = useModal(false);
   const handleAccessTokens = useCallback(() => {
-    setVestingTemp(true);
+    setAccessTokens(true);
+    handleOpenModal();
+  }, [handleOpenModal]);
+  const handleVesting = useCallback(() => {
+    setVesting(true);
   }, []);
 
   return (
@@ -28,17 +35,19 @@ const Home: FC = observer(() => {
         </div>
         {user.address && (
           <>
-            <Button color="filled" className={s.btn} onClick={handleAccessTokens}>
-              Access Your $RYLT Tokens
-            </Button>
-            <Button color="outline" className={s.btn}>
+            {!accessTokens && (
+              <Button color="filled" className={s.btn} onClick={handleAccessTokens}>
+                Access Your $RYLT Tokens
+              </Button>
+            )}
+            <Button color="outline" className={s.btn} onClick={handleVesting}>
               Buy Extra $RYLT Tokens
             </Button>
           </>
         )}
       </div>
       <div className={s.col}>
-        {vestingTemp ? (
+        {vesting ? (
           <Vesting />
         ) : (
           <div className={s.home_img}>
@@ -46,6 +55,11 @@ const Home: FC = observer(() => {
           </div>
         )}
       </div>
+      <SuccessModal
+        text="RYLT is credited to your wallet"
+        visible={isVisibleModal}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 });

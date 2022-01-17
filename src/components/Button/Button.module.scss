@@ -11,12 +11,12 @@
   white-space: nowrap;
   @include flex(row, center, center, nowrap);
   box-sizing: border-box;
+  color: $text-btn-color-white;
 
   &.default {
     background: $bg-btn-default;
     border-radius: 18px;
     border: 1px solid $border-btn-default;
-    color: $text-btn-color-white;
   }
 
   &.filled,&.outline {
@@ -28,9 +28,31 @@
     background: $color-accent;
     border-radius: 16px;
     padding: 24px 54px;
+    &:hover, &:focus {
+      background: $bg-btn-filled-hover;
+    }
   }
   &.outline {
     border: 2px solid $color-accent;
     border-radius: 18px;
+    &:hover, &:focus {
+      background: $color-accent;
+    }
+  }
+  &.sm {
+    padding: 8px 30px 11px;
+    text-transform: none;
+    border-radius: 8px;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    background: transparent;
+    opacity: 0.2;
+    border: 1.52381px solid $text-btn-disabled;
+    color: #F0F0F0;
+    &:hover, &:focus {
+      background: transparent;
+      opacity: 0.4;
+    }
   }
 }

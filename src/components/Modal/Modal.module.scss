@@ -1,0 +1,38 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+:global(.modal) {
+  z-index: 100;
+  overflow: hidden;
+
+  &-mask {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+
+    background: rgba(0,0,0,0.8);
+  }
+
+  &-wrap {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    @include flex(row, center, center);
+    width: 100%;
+    padding: 50px 0;
+
+    overflow: auto;
+
+    outline: 0;
+  }
+}
+.modal_wrapper {
+  position: relative;
+  border-radius: 68px;
+  background: $bg-main;
+}

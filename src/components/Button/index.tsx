@@ -35,7 +35,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
     return (
       <Link
         to={href}
-        className={cn(s.button, s[color], className, {
+        className={cn(className, s.button, s[color], {
           [s.disabled]: disabled || color === 'disabled',
         })}
       >

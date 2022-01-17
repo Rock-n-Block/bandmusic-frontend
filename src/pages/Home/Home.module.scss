@@ -3,11 +3,16 @@
 
 .home_wrapper {
   padding-top: 20px;
+  padding-bottom: 58px;
   width: 100%;
   @include flex(row, flex-start, space-between);
 
   .col {
+    width: 100%;
     max-width: 699px;
+    &:last-of-type {
+      max-width: 527px;
+    }
   }
 
   .title {
@@ -37,6 +42,6 @@
     }
   }
   .home_img {
-    max-width: 476px;
+    max-width: 529px;
   }
 }

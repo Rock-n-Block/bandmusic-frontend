@@ -2,6 +2,9 @@
   "name": "bandmusic",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=16"
+  },
   "dependencies": {
     "axios": "^0.24.0",
     "bignumber.js": "^9.0.2",

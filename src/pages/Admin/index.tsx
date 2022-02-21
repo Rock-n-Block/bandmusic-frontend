@@ -83,12 +83,14 @@ const Admin: VFC = observer(() => {
           'error',
           `Uploaded file is incorrect. Please make sure it corresponds with the Sample file.`,
         );
-      } else if (errs.length) {
-        openModal(
-          'warning',
-          `Some rows have been removed because of the incorrect data in one or several fields`,
-        );
+      } else {
         const totalAmount = data.map((line) => line.amount).reduce((acc, val) => +acc + +val, 0);
+        if (errs.length) {
+          openModal(
+            'warning',
+            `Some rows have been removed because of the incorrect data in one or several fields`,
+          );
+        }
         if (new BigNumber(totalAmount).gte(currentBalance)) {
           openModal('error', `You don't have enough currency, please edit the table`);
         }

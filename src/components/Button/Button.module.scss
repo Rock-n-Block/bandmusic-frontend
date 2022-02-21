@@ -11,6 +11,7 @@
   @include flex(row, center, center, nowrap);
   box-sizing: border-box;
   color: $text-btn-color-white;
+  @include transition;
 
   &.default {
     background: $bg-btn-default;
@@ -18,7 +19,8 @@
     border: 1px solid $border-btn-default;
   }
 
-  &.filled,&.outline {
+  &.filled,
+  &.outline {
     font-weight: 500;
     font-size: 24px;
     line-height: 29px;
@@ -27,14 +29,16 @@
     background: $color-accent;
     border-radius: 16px;
     padding: 24px 54px;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: $bg-btn-filled-hover;
     }
   }
   &.outline {
     border: 2px solid $color-accent;
     border-radius: 18px;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: $color-accent;
     }
   }
@@ -43,15 +47,51 @@
     text-transform: none;
     border-radius: 8px;
   }
+  &.underline {
+    color: $text-color;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 29px;
+    letter-spacing: 0.04em;
+    position: relative;
+    width: fit-content;
+    &:after {
+      content: '';
+      height: 1.5px;
+      width: 100%;
+      @include transition;
+      background: $text-color;
+      left: 0;
+      bottom: 0;
+      position: absolute;
+    }
+    &:hover {
+      transform: scale(1.025);
+      &:after {
+        height: 0;
+      }
+    }
+  }
   &.disabled {
     cursor: not-allowed;
     background: transparent;
     opacity: 0.2;
     border: 1.52381px solid $text-btn-disabled;
-    color: #F0F0F0;
-    &:hover, &:focus {
+    color: #f0f0f0;
+    &:hover,
+    &:focus {
       background: transparent;
       opacity: 0.4;
+    }
+  }
+}
+
+@media (max-width: 541px) {
+  .button {
+    &.filled,
+    &.outline {
+      font-size: 20px;
+      line-height: 24px;
     }
   }
 }

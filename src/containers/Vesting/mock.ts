@@ -1,4 +1,4 @@
-import { addHours, getTime } from 'date-fns';
+import { addHours, getTime, addDays } from 'date-fns';
 
 export const stages = [
   {
@@ -23,7 +23,7 @@ export const stages = [
   },
   {
     number: '05',
-    time: getTime(addHours(new Date(), 4)),
+    time: getTime(addDays(new Date(), 4)),
     status: 'disabled',
   },
 ];

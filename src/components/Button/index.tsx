@@ -2,10 +2,12 @@ import { CSSProperties, FC, PropsWithChildren, RefObject, SyntheticEvent } from 
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
+import { Loader } from '..';
+
 import s from './Button.module.scss';
 
 export interface IButton {
-  color?: 'default' | 'filled' | 'outline' | 'disabled';
+  color?: 'default' | 'filled' | 'outline' | 'disabled' | 'underline';
   size?: 'lg' | 'sm';
   className?: string;
   onClick?: (event: never) => void;
@@ -15,7 +17,9 @@ export interface IButton {
   onMouseOver?: (event: SyntheticEvent) => void;
   style?: CSSProperties;
   href?: string;
+  route?: string;
   btnRef?: RefObject<HTMLButtonElement>;
+  isLoading?: boolean;
 }
 
 const Button: FC<PropsWithChildren<IButton>> = ({
@@ -27,19 +31,34 @@ const Button: FC<PropsWithChildren<IButton>> = ({
   children,
   disabled,
   href,
+  route,
   btnRef,
   onMouseLeave,
   onMouseOver = () => {},
+  isLoading = false,
 }) => {
   if (href)
     return (
+      <a
+        href={href}
+        target="_blank"
+        className={cn(className, s.button, s[color], {
+          [s.disabled]: disabled || color === 'disabled',
+        })}
+        rel="noreferrer"
+      >
+        {isLoading ? <Loader /> : children}
+      </a>
+    );
+  if (route)
+    return (
       <Link
-        to={href}
+        to={route}
         className={cn(className, s.button, s[color], {
           [s.disabled]: disabled || color === 'disabled',
         })}
       >
-        {children}
+        {isLoading ? <Loader /> : children}
       </Link>
     );
   return (
@@ -54,7 +73,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
       onMouseLeave={onMouseLeave}
       onMouseEnter={onMouseOver}
     >
-      {children}
+      {isLoading ? <Loader /> : children}
     </button>
   );
 };

@@ -1,0 +1,85 @@
+@import '/src/styles/mixins/helpers.scss';
+@import '/src/styles/variables';
+
+.wrapper {
+  @include flex(column, center, flex-start, nowrap);
+
+  .title {
+    text-align: center;
+    @include h1;
+  }
+
+  .hiddenInput {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+  .uploadBtn {
+    min-width: 640px;
+    @include flex(row, center, space-between, nowrap);
+    padding: 24px 40px;
+    border: 1px solid $text-color;
+    @include transition;
+    margin-top: 80px;
+    &:not(.uploaded:hover) {
+      background: transparent;
+    }
+
+    &.uploaded {
+      border: 1px solid $color-accent;
+      .uploadBtnIcon:hover {
+        svg {
+          transform-origin: center;
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    &Text {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 24px;
+      letter-spacing: 0.04em;
+    }
+
+    &Icon {
+      width: 32px;
+      height: 32px;
+      background: transparent;
+      border: 0px solid transparent;
+      svg {
+        @include transition;
+      }
+    }
+  }
+
+  .tableContent {
+    overflow: hidden;
+    height: auto;
+    max-height: 0;
+    @include transition;
+    width: 100%;
+    &.showTable {
+      max-height: 1200px;
+    }
+  }
+
+  .eventBtn {
+    margin: 40px 0 120px;
+    &.enlarged {
+      min-width: 310px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+    .wrapper{
+        .uploadBtn{
+            min-width: 0;
+        }
+    }
+}

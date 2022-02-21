@@ -1,46 +1,51 @@
-import { FC, useCallback, useEffect, useState } from 'react';
-import cn from 'classnames';
+import { FC, useCallback, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import logo from '@/assets/img/icons/logo.svg';
-import walletConnectPath from '@/assets/img/icons/walletconnect.svg';
+import { ReactComponent as MetaMaskSVG } from '@/assets/img/icons/metamask.svg';
+import { ReactComponent as WalletConnectSVG } from '@/assets/img/icons/walletconnect.svg';
 import { Button } from '@/components';
-import { useWalletContext } from '@/context';
+import { useModal } from '@/context';
 import { useMst } from '@/store';
 import { splitAddress } from '@/utils';
 
 import { SuccessModal } from '..';
 
+import { AddressModal, ConnectModal } from './components';
+
 import s from './Header.module.scss';
+import { TAvailableProviders } from '@/types';
+
+const getIcon = (provider: TAvailableProviders) => {
+  switch (provider) {
+    case 'MetaMask': {
+      return <MetaMaskSVG />;
+    }
+    case 'WalletConnect': {
+      return <WalletConnectSVG />;
+    }
+    default: {
+      return <WalletConnectSVG />;
+    }
+  }
+};
 
 const Header: FC = observer(() => {
   const { user } = useMst();
-  const { connect, disconnect } = useWalletContext();
 
-  const [isDisconnectOpen, setIsDisconnectOpen] = useState(false);
-  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
+  const { openModal, closeModal, isOpen } = useModal();
 
-  const handleConnect = useCallback(() => {
-    connect('WalletConnect');
-  }, [connect]);
+  const handleModalOpen = useCallback(() => {
+    openModal('chooseWallet');
+  }, [openModal]);
 
-  const handlerToggleDisconnect = useCallback(() => {
-    setIsDisconnectOpen((prev) => !prev);
-  }, []);
-
-  const handleDisconnect = useCallback(() => {
-    disconnect();
-  }, [disconnect]);
-
-  useEffect(() => {
-    if (!user.address) {
-      setIsDisconnectOpen(false);
-    }
-  }, [user.address]);
+  const openAddress = useCallback(() => {
+    openModal('address');
+  }, [openModal]);
 
   useEffect(() => {
     if (user.address) {
-      setIsConnectModalOpen(true);
+      closeModal('chooseWallet');
     }
   }, [user.address]);
 
@@ -51,29 +56,26 @@ const Header: FC = observer(() => {
       </div>
       {user.address ? (
         <div className={s.connectWrapper}>
-          <Button className={s.btn_connected} onClick={handlerToggleDisconnect}>
+          <Button className={s.btn_connected} onClick={openAddress}>
             <div className={s.icon}>
-              <img src={walletConnectPath} alt="WalletConnectIcon" />
+              {getIcon(localStorage.getItem('bandmusic-wallet') as TAvailableProviders)}
             </div>
             <div className={s.text}>{splitAddress(user.address, 22, 3)}</div>
             <div className={s.mobileText}>{splitAddress(user.address, 10, 3)}</div>
           </Button>
-          <div className={cn(s.disconnect, { [s.active]: isDisconnectOpen })}>
-            <Button className={cn(s.btn_disconnected)} onClick={handleDisconnect}>
-              Disconnect
-            </Button>
-          </div>
         </div>
       ) : (
-        <Button color="filled" className={s.btn} onClick={handleConnect}>
+        <Button color="filled" className={s.btn} onClick={handleModalOpen}>
           Connect Wallet
         </Button>
       )}
       <SuccessModal
-        visible={isConnectModalOpen}
+        visible={isOpen('successConnect')}
         text="Your wallet has been successfully connected"
-        onClose={() => setIsConnectModalOpen(false)}
+        onClose={() => closeModal('successConnect')}
       />
+      <ConnectModal />
+      <AddressModal />
     </div>
   );
 });

@@ -3,8 +3,7 @@ import { observer } from 'mobx-react-lite';
 
 import homeImg from '@/assets/img/home.png';
 import { Button } from '@/components';
-import { SuccessModal, Vesting } from '@/containers';
-import useModal from '@/hooks/useModal';
+import { Vesting } from '@/containers';
 import { useMst } from '@/store';
 
 import s from './Home.module.scss';
@@ -12,7 +11,6 @@ import s from './Home.module.scss';
 const Home: FC = observer(() => {
   const [vesting, setVesting] = useState<boolean>(false);
   const { user, claimerInfo } = useMst();
-  const [isVisibleModal, handleCloseModal] = useModal(false);
 
   const handleVesting = useCallback(() => {
     setVesting(true);
@@ -51,11 +49,6 @@ const Home: FC = observer(() => {
           </div>
         )}
       </div>
-      <SuccessModal
-        text="RYLT is credited to your wallet"
-        visible={isVisibleModal}
-        onClose={handleCloseModal}
-      />
     </div>
   );
 });

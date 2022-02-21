@@ -10,6 +10,7 @@ import { useMst } from '@/store';
 import { SingleClaim } from '@/store/Models/Claimer';
 
 import s from './Vesting.module.scss';
+import { formatNumber } from '@/utils';
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
@@ -22,8 +23,8 @@ const Vesting: FC = observer(() => {
   const [isClaimAllActive, setIsClaimAllActive] = useState(canClaim.length !== 0);
 
   useEffect(() => {
-    setIsClaimAllActive(waiting.length !== 0);
-  }, [waiting.length]);
+    setIsClaimAllActive(canClaim.length !== 0);
+  }, [canClaim.length]);
 
   const claimEvent = useCallback(
     async (amount: string[], timestamp: string[], signature: string[], idx: string[]) => {
@@ -31,7 +32,7 @@ const Vesting: FC = observer(() => {
       const removedProcesses = inProcess.filter((p) => !idx.includes(p));
       try {
         const transaction = await claimTokens(amount, timestamp, signature, address);
-        if ('TokensClaimed' in transaction.events) {
+        if (transaction.events) {
           const data = amount.map<TUpdateStatusData>((a, key) => ({
             wallet_address: address,
             token_amount: new BigNumber(a).toNumber(),
@@ -39,8 +40,8 @@ const Vesting: FC = observer(() => {
             tx_hash: transaction.transactionHash,
           }));
           openModal('success', 'RYLT is credited to your wallet');
-          await fetchUserData(address, isOwner);
           await vesting.update_status(data);
+          await fetchUserData(address, isOwner);
         }
         setInProcess(removedProcesses);
         return true;
@@ -94,7 +95,7 @@ const Vesting: FC = observer(() => {
   return (
     <div className={s.vesting_wrapper}>
       <div className={s.count}>
-        {new BigNumber(balance).toFixed(4)}
+        {formatNumber(new BigNumber(balance).toFixed(2))}
         <span>RYLT</span>
       </div>
 
@@ -106,7 +107,7 @@ const Vesting: FC = observer(() => {
             className={s.claim_all}
             onClick={onClaimAllClick}
             color="filled"
-            isLoading={inProcess.length !== 0}
+            isLoading={inProcess.length >= 2}
             disabled={inProcess.length !== 0}
           >
             Claim all
@@ -115,18 +116,18 @@ const Vesting: FC = observer(() => {
       )}
 
       <div className={s.stages}>
-        {confirmed.map((stage, key) => (
+        {confirmed.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <div className={s.stage_number}>{key + 1} stage</div>
+            <div className={s.stage_number}>{stage.stage} stage</div>
             <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
             <Button size="sm" className={s.stage_btn} color="filled" disabled>
               Claimed
             </Button>
           </div>
         ))}
-        {pending.map((stage, key) => (
+        {pending.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <div className={s.stage_number}>{key + confirmed.length + 1} stage</div>
+            <div className={s.stage_number}>{stage.stage} stage</div>
             <Timer
               className={s.stage_timer}
               deadline={stage.timestamp * 1000}
@@ -137,11 +138,9 @@ const Vesting: FC = observer(() => {
             </Button>
           </div>
         ))}
-        {waiting.map((stage, key) => (
+        {waiting.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <div className={s.stage_number}>
-              {key + confirmed.length + pending.length + 1} stage
-            </div>
+            <div className={s.stage_number}>{stage.stage} stage</div>
             <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
             <Button
               size="sm"

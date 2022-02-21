@@ -8,7 +8,7 @@ import { useMst } from '@/store';
 import { IWalletConnectContext, TAvailableProviders } from '@/types';
 import { logger, normalizedValue } from '@/utils';
 
-import { useContractContext } from '.';
+import { useContractContext, useModal } from '.';
 
 const WalletContext = createContext<IWalletConnectContext>({} as IWalletConnectContext);
 const wcService = WalletService;
@@ -19,6 +19,7 @@ type TClaimResponseClaim = {
   claimed_at: string;
   signature: string;
   status: string;
+  stage: number;
 };
 
 const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => {
@@ -32,12 +33,14 @@ const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => 
       signature: line.signature,
       timestamp: +line.claimed_at,
       idx: `${key}${k}`,
+      stage: line.stage,
     }));
 };
 
 const WalletConnectProvider: FC = ({ children }) => {
   const { user, ownerInfo, claimerInfo } = useMst();
-  const { getOwnerStatus, setProvider } = useContractContext();
+  const { getOwnerStatus, setProvider, getBalance } = useContractContext();
+  const { openModal } = useModal();
 
   const loginUser = useCallback(
     async (address, isOwner) => {
@@ -67,6 +70,8 @@ const WalletConnectProvider: FC = ({ children }) => {
       }
       user.setUser({ balance: '0', address });
       user.setIsOwner(isOwner);
+      const balance = await getBalance(address, isOwner);
+      user.setBalance(balance);
       return true;
     },
     [user],
@@ -83,14 +88,18 @@ const WalletConnectProvider: FC = ({ children }) => {
             address: line.wallet_address,
             saleType: line.sale_type,
             idx: `db${key}`,
+            stage: key + 1,
           })),
         );
       } else {
-        const claims = await vesting.getData(address);
-
-        claimerInfo.setConfirmed(normalizeUserData(claims.data[0]?.claims, 'Confirmed'));
-        claimerInfo.setPending(normalizeUserData(claims.data[0]?.claims, 'Pending'));
-        claimerInfo.setWaiting(normalizeUserData(claims.data[0]?.claims, 'Waiting'));
+        const rawClaims = await vesting.getData(address);
+        const claims = rawClaims.data[0].claims.map((claim: any, key: number) => ({
+          ...claim,
+          stage: key + 1,
+        }));
+        claimerInfo.setConfirmed(normalizeUserData(claims, 'Confirmed'));
+        claimerInfo.setPending(normalizeUserData(claims, 'Pending'));
+        claimerInfo.setWaiting(normalizeUserData(claims, 'Waiting'));
       }
     },
     [claimerInfo, ownerInfo],
@@ -130,6 +139,7 @@ const WalletConnectProvider: FC = ({ children }) => {
             if (logged) {
               await fetchUserData(accountInfo.address, isOwner);
               wcService.eventSubscribe(onAccountChange);
+              openModal('successConnect');
             }
           }
         } catch (error) {

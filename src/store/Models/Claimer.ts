@@ -5,6 +5,7 @@ const ClaimLine = types.model({
   timestamp: types.number,
   signature: types.string,
   idx: types.string,
+  stage: types.number,
 });
 
 const DataType = types.array(ClaimLine);

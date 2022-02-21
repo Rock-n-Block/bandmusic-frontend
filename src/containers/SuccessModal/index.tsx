@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 
 import loadingIcon from '@/assets/img/icons/loading.svg';
 import okIcon from '@/assets/img/icons/ok.svg';
@@ -9,23 +9,15 @@ import s from './SuccessModal.module.scss';
 
 export interface ISuccessModalProps extends IModalProps {
   text: string;
+  loading?: boolean;
 }
 
-const WalletConnectModal: FC<ISuccessModalProps> = ({ text, visible, onClose }) => {
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    let t: NodeJS.Timeout;
-    if (visible) {
-      t = setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-    }
-    return () => {
-      clearTimeout(t);
-    };
-  }, [visible]);
-
+const WalletConnectModal: FC<ISuccessModalProps> = ({
+  text,
+  visible,
+  onClose,
+  loading = false,
+}) => {
   return (
     <Modal className={s.modal_wrapper} visible={visible} onClose={onClose}>
       <div className={s.success_modal_wrapper}>

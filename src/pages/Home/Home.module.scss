@@ -5,21 +5,17 @@
   padding-top: 20px;
   padding-bottom: 58px;
   width: 100%;
-  @include flex(row, flex-start, space-between);
-
-  .col {
-    width: 100%;
-    max-width: 699px;
-    &:last-of-type {
-      max-width: 527px;
-    }
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.7fr 1.3fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'title content-block'
+    'info content-block';
 
   .title {
-    font-weight: 900;
-    font-size: 72px;
-    line-height: 80px;
-    margin-bottom: 32px;
+    @include h1;
+    grid-area: title;
     span {
       color: $color-accent;
     }
@@ -28,6 +24,16 @@
     font-size: 14px;
     max-width: 492px;
     margin-bottom: 38px;
+    grid-area: info;
+  }
+  .content {
+    grid-area: content-block;
+    display: grid;
+    justify-content: flex-end;
+    padding-left: 20px;
+  }
+  .btns {
+    margin-top: 50px;
   }
   .btn {
     width: 419px;
@@ -43,5 +49,40 @@
   }
   .home_img {
     max-width: 529px;
+  }
+}
+
+@media (max-width: 1025px) {
+  .home_wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 1.2fr 0.4fr;
+    grid-template-areas:
+      'title'
+      'content-block'
+      'info';
+    .description{
+      margin-top: 20px;
+      max-width: max-content;
+    }
+    .home_img{
+      max-width: 100%;
+    }
+    .content {
+      margin-top: 20px;
+      @include flex(row, center, center, nowrap);
+      padding-left: 0;
+    }
+    .btns{
+      @include flex(column, center, center, nowrap);
+    }
+    .btn {
+      width: 100%;
+      font-size: 20px;
+      line-height: 24px;
+      padding: 20px 54px;
+      &:first-of-type{
+        padding: 26px 32px;
+      }
+    }
   }
 }

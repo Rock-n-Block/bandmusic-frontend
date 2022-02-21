@@ -1,0 +1,57 @@
+@import '/src/styles/mixins/helpers.scss';
+@import '/src/styles/variables';
+
+.modalWrapper{
+  min-width: 415px;
+  border-radius: 12px;
+}
+
+.wrapper {
+  max-width: 475px;
+  padding: 1rem 3rem;
+  background: $admin-modal-background;
+  border-radius: 0.75rem;
+  @include flex(column, center, center, nowrap);
+  gap: 0.875rem;
+  position: relative;
+  min-height: 350px;
+  line-height: 1.5rem;
+  font-size: 1.125rem;
+
+  .text {
+    text-align: center;
+    color: $gray;
+  }
+
+  .cross {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background: transparent;
+    appearance: none;
+    border: none;
+  }
+
+  .status{
+    .warn{
+      &Wrapper{
+        @include flex(column, center, center, nowrap);
+      }
+      &Title{
+        font-weight: 800;
+        color: $gray;
+        margin-top: 15px;
+      }
+    }
+  }
+
+  .button {
+    padding: 12px 7rem;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .wrapper {
+    margin: 0 10px;
+  }
+}

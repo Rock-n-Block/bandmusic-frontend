@@ -6,6 +6,7 @@
     "node": ">=16"
   },
   "dependencies": {
+    "@amfi/connect-wallet": "^1.1.24",
     "axios": "^0.24.0",
     "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
@@ -14,13 +15,18 @@
     "mobx-react": "^7.2.1",
     "mobx-react-lite": "^3.2.2",
     "mobx-state-tree": "^5.0.5",
+    "node-polyfill-webpack-plugin": "^1.1.4",
     "rc-dialog": "^8.6.0",
+    "rc-select": "^14.0.0-alpha.26",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router": "^6.0.2",
     "react-router-dom": "^6.0.2",
     "react-scripts": "5.0.0",
-    "typescript": "^4.1.2"
+    "typescript": "^4.1.2",
+    "web3": "^1.7.0",
+    "web3-utils": "^1.7.0",
+    "webutils": "^0.0.5"
   },
   "devDependencies": {
     "@craco/craco": "^6.4.0",

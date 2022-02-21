@@ -36,3 +36,9 @@
   border-radius: 68px;
   background: $bg-main;
 }
+
+@media (max-width: 541px) {
+  .modal_wrapper{
+    margin: 0 15px;
+  }
+}

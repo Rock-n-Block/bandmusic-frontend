@@ -9,7 +9,7 @@ import { ReactComponent as DeleteSVG } from '@/assets/img/icons/closeLight.svg';
 import { ReactComponent as UploadSVG } from '@/assets/img/icons/upload.svg';
 import { AdminTable, Button } from '@/components';
 import { contracts } from '@/config';
-import { useContractContext } from '@/context';
+import { useContractContext, useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { TCurrentFile, TLoaded } from '@/store/Models/Owner';
 import { deNormalizedValue, generateCSV, parseCSV } from '@/utils';
@@ -62,6 +62,7 @@ const Admin: VFC = observer(() => {
   const { currentFiles, loadedFiles, setCurrentFiles } = useMst().ownerInfo;
   const { address, isOwner } = useMst().user;
   const { openModal } = useMst().modal;
+  const { fetchUserData } = useWalletContext();
   const { getBalance, getAllowance, sendApprove, sendTransfer } = useContractContext();
   const [csvFile, setCSVFile] = useState<File | null>(null);
   const [state, setState] = useState(1);
@@ -88,7 +89,7 @@ const Admin: VFC = observer(() => {
           `Some rows have been removed because of the incorrect data in one or several fields`,
         );
         const totalAmount = data.map((line) => line.amount).reduce((acc, val) => +acc + +val, 0);
-        if (new BigNumber(totalAmount).gt(currentBalance)) {
+        if (new BigNumber(totalAmount).gte(currentBalance)) {
           openModal('error', `You don't have enough currency, please edit the table`);
         }
         setCurrentFiles({ name: csvFile?.name || 'file', content: cast(data) });
@@ -159,7 +160,8 @@ const Admin: VFC = observer(() => {
     const checkAllowance = async (onAllowance: () => void) => {
       try {
         const allowance = await getAllowance(address, VestingAddress);
-        if (new BigNumber(allowance).gte(deNormalizedValue(needAmount))) {
+        console.log(allowance, needAmount);
+        if (new BigNumber(allowance).gte(needAmount)) {
           onAllowance();
         } else if (tries <= maxTries) {
           tries += 1;
@@ -192,6 +194,7 @@ const Admin: VFC = observer(() => {
       }
     };
     const onAllowance = async () => {
+      setIsLoading(true);
       const transaction = await sendTransfer(
         VestingAddress,
         deNormalizedValue(needAmount),
@@ -202,6 +205,7 @@ const Admin: VFC = observer(() => {
           const response = await vesting.sendData(currentFiles.content);
           if (response.status === 201) {
             openModal('success', 'Your tokens have been successfully distributed');
+            await fetchUserData(address, isOwner);
             setCurrentFiles({ name: '', content: cast([]) });
             setCSVFile(null);
           } else {
@@ -221,7 +225,9 @@ const Admin: VFC = observer(() => {
   }, [
     address,
     currentFiles.content,
+    fetchUserData,
     getAllowance,
+    isOwner,
     openModal,
     sendApprove,
     sendTransfer,

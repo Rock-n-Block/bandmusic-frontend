@@ -98,7 +98,7 @@ const Vesting: FC = observer(() => {
 
       <div className={s.count}>
         {formatNumber(
-          new BigNumber(balance).toFixed(2),
+          new BigNumber(balance).toString(),
           +balance < 1000 ? 'withCommas' : 'compact',
         )}
         <span>RYLT</span>

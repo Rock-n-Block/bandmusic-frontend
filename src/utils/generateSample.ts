@@ -9,7 +9,7 @@ const generateCSV = () => {
     '0x063C22e0917b4B051cb81Ef91c5052Cd8C0D0E56',
     '0xBF7E42e9254A5E64D946bD206120ae5BafaC7781',
   ];
-  const repeats = 2;
+  const repeats = 1;
   const delay = 20 * 60;
   const timestamp = Date.now() / 1000;
   const csvData: any[] = [];

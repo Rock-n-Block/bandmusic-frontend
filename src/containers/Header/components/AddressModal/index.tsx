@@ -40,7 +40,7 @@ const AddressModal: VFC = () => {
               <CopySVG />
             </span>
           </Button>
-          <span className={s.notify}>{clipStatus === 1 ? 'clipped!' : ''}</span>
+          <span className={s.notify}>{clipStatus === 1 ? 'copied!' : ''}</span>
           <Button className={s.provider} color="filled" onClick={onDisconnectClick}>
             <span className={s.text}>Disconnect</span>
             <span className={s.icon}>

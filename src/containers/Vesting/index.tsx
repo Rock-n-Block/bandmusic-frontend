@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { toJS } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 import vesting, { TUpdateStatusData } from '@/api/vesting';
@@ -103,7 +102,13 @@ const Vesting: FC = observer(() => {
 
       {isClaimAllActive && (
         <div className={s.claim}>
-          <Button className={s.claim_all} onClick={onClaimAllClick} color="filled">
+          <Button
+            className={s.claim_all}
+            onClick={onClaimAllClick}
+            color="filled"
+            isLoading={inProcess.length !== 0}
+            disabled={inProcess.length !== 0}
+          >
             Claim all
           </Button>
         </div>

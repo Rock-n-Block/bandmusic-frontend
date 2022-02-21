@@ -163,6 +163,7 @@
   .wrapper {
     .baseData {
       text-align: center;
+      @include flex(column, center, center);
     }
   }
 }

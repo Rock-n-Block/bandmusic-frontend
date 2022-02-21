@@ -2,51 +2,59 @@
 @import '/src/styles/mixins/helpers.scss';
 
 .modalWrapper {
-    padding: 60px 40px 50px;
-    position: relative;
-    min-width: 500px;
+  padding: 60px 40px 50px;
+  position: relative;
+  min-width: 500px;
+}
+
+.wrapper {
+  .close {
+    position: absolute;
+    top: 30px;
+    right: 35px;
+    background: transparent;
+    border: 1px solid transparent;
   }
-  .wrapper {
-    .close {
-      position: absolute;
-      top: 30px;
-      right: 35px;
-      background: transparent;
-      border: 1px solid transparent;
+  .title {
+    margin-bottom: 30px;
+    text-align: center;
+    @include h3;
+  }
+  .providers {
+    @include flex(column, flex-start, center);
+    .provider {
+      &:not(:last-child) {
+        margin-bottom: 20px;
+      }
+      width: 100%;
+      min-height: 60px;
+      @include flex(row, center, center);
+      .icon {
+        margin-left: 10px;
+        font-size: 24px;
+        line-height: 28px;
+        min-width: 28px;
+        @include flex(row, center, center);
+      }
+      .text {
+        font-size: 28px;
+        line-height: 32px;
+        margin-left: 10px;
+      }
     }
-    .title{
-        margin-bottom: 30px;
-        text-align: center;
-        @include h3;
-    }
-    .providers{
-        @include flex(column, flex-start, center);
-        .provider{
-            &:not(:last-child){
-                margin-bottom: 20px;
-            }
-            width: 100%;
-            min-height: 60px;
-            @include flex(row, center, center);
-            .icon{
-                margin-left: 10px;
-                font-size: 24px;
-                line-height: 28px;
-                min-width: 28px;
-                @include flex(row, center, center);
-            }
-            .text{
-                font-size: 28px;
-                line-height: 32px;
-                margin-left: 10px;
-            }
-        }
-        .notify{
-            text-align: center;
-            display: inline-block;
-            width: 100%;
-            margin-bottom: 20px;
-        }
+    .notify {
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 20px;
     }
   }
-  
+}
+
+@media (max-width: 541px) {
+    .modalWrapper {
+      min-width: 100%;
+      margin: 0 15px;
+      padding: 30px 40px;
+    }
+  }

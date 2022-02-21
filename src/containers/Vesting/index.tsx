@@ -94,6 +94,8 @@ const Vesting: FC = observer(() => {
 
   return (
     <div className={s.vesting_wrapper}>
+      <div className={s.balance}>Your current balance:</div>
+
       <div className={s.count}>
         {formatNumber(
           new BigNumber(balance).toFixed(2),

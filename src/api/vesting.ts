@@ -23,7 +23,9 @@ export default {
     }),
   getData: (address?: string, status?: VestingClaimStatus) =>
     api.get(
-      `${base}users/?wallet_address=${address || ''}${status ? `&claims__status=${status}` : ''}`,
+      `${base}users/?wallet_address=${address?.toLowerCase() || ''}${
+        status ? `&claims__status=${status}` : ''
+      }`,
     ),
   sendData: (data: TLoaded) =>
     api.post(`${base}users/`, {

@@ -97,10 +97,7 @@ const Vesting: FC = observer(() => {
       <div className={s.balance}>Your current balance:</div>
 
       <div className={s.count}>
-        {formatNumber(
-          new BigNumber(balance).toString(),
-          +balance < 1000 ? 'withCommas' : 'compact',
-        )}
+        {formatNumber(new BigNumber(balance).toString(), 'compact')}
         <span>RYLT</span>
       </div>
 

@@ -30,7 +30,7 @@ export default {
   sendData: (data: TLoaded) =>
     api.post(`${base}users/`, {
       drop: data.map((line) => ({
-        wallet_address: line.address,
+        wallet_address: line.address.toLowerCase(),
         join_at: line.timestamp,
         tokens_bought: new BigNumber(deNormalizedValue(line.amount)).toNumber(),
         sale_type: line.saleType,

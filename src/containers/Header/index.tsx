@@ -2,7 +2,7 @@ import { FC, useCallback, useEffect, useState } from 'react';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 
-import logo from '@/assets/img/icons/logo.png';
+import logo from '@/assets/img/icons/logo.svg';
 import walletConnectPath from '@/assets/img/icons/walletconnect.svg';
 import { Button } from '@/components';
 import { useWalletContext } from '@/context';

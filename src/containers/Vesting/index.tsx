@@ -8,9 +8,9 @@ import { Timer } from '@/containers';
 import { useContractContext, useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { SingleClaim } from '@/store/Models/Claimer';
+import { formatNumber } from '@/utils';
 
 import s from './Vesting.module.scss';
-import { formatNumber } from '@/utils';
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
@@ -95,7 +95,10 @@ const Vesting: FC = observer(() => {
   return (
     <div className={s.vesting_wrapper}>
       <div className={s.count}>
-        {formatNumber(new BigNumber(balance).toFixed(2))}
+        {formatNumber(
+          new BigNumber(balance).toFixed(2),
+          +balance < 1000 ? 'withCommas' : 'compact',
+        )}
         <span>RYLT</span>
       </div>
 

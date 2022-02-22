@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { observer } from 'mobx-react-lite';
 
@@ -21,15 +21,31 @@ const Vesting: FC = observer(() => {
   const [canClaim, setCanClaim] = useState<SingleClaim[]>([]);
   const [inProcess, setInProcess] = useState<string[]>([]);
   const [isClaimAllActive, setIsClaimAllActive] = useState(canClaim.length !== 0);
+  const timer = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
     setIsClaimAllActive(canClaim.length !== 0);
   }, [canClaim.length]);
 
+  const reFetch = useCallback(async () => {
+    await fetchUserData(address, isOwner);
+  }, [address, fetchUserData, isOwner]);
+
+  useEffect(() => {
+    if (!timer.current) {
+      timer.current = setInterval(() => {
+        reFetch();
+      }, 15000);
+    }
+    return () => {
+      if (timer.current) clearInterval(timer.current);
+    };
+  }, [reFetch]);
+
   const claimEvent = useCallback(
     async (amount: string[], timestamp: string[], signature: string[], idx: string[]) => {
       setInProcess((prev) => [...prev, ...idx]);
-      const removedProcesses = inProcess.filter((p) => !idx.includes(p));
+      const removedProcesses = inProcess.filter((p) => idx.includes(p));
       try {
         const transaction = await claimTokens(amount, timestamp, signature, address);
         if (transaction.events) {
@@ -86,11 +102,16 @@ const Vesting: FC = observer(() => {
     await claimEvent(amounts, timestamps, signatures, idxs);
   }, [canClaim, claimEvent]);
 
-  const onTimerEnd = useCallback((claim: SingleClaim) => {
-    return () => {
-      setCanClaim((prev) => [...prev, claim]);
-    };
-  }, []);
+  const onTimerEnd = useCallback(
+    (claim: SingleClaim) => {
+      return () => {
+        if (waiting.findIndex((w) => w.idx === claim.idx) !== -1) {
+          setCanClaim((prev) => [...prev, claim]);
+        }
+      };
+    },
+    [waiting],
+  );
 
   return (
     <div className={s.vesting_wrapper}>

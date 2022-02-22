@@ -11,7 +11,6 @@ import { SingleClaim } from '@/store/Models/Claimer';
 import { formatNumber } from '@/utils';
 
 import s from './Vesting.module.scss';
-import { toJS } from 'mobx';
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
@@ -25,7 +24,7 @@ const Vesting: FC = observer(() => {
   const timer = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
-    setIsClaimAllActive(canClaim.length !== 0);
+    setIsClaimAllActive(canClaim.length >= 2);
   }, [canClaim.length]);
 
   const reFetch = useCallback(async () => {

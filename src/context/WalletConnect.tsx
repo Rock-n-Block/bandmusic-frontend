@@ -93,10 +93,12 @@ const WalletConnectProvider: FC = ({ children }) => {
         );
       } else {
         const rawClaims = await vesting.getData(address);
-        const claims = rawClaims.data[0].claims.map((claim: any, key: number) => ({
-          ...claim,
-          stage: key + 1,
-        }));
+        const claims = rawClaims.data[0].claims
+          .sort((f: any, s: any) => f.claimed_at - s.claimed_at)
+          .map((claim: any, key: number) => ({
+            ...claim,
+            stage: key + 1,
+          }));
         claimerInfo.setConfirmed(normalizeUserData(claims, 'Confirmed'));
         claimerInfo.setPending(normalizeUserData(claims, 'Pending'));
         claimerInfo.setWaiting(normalizeUserData(claims, 'Waiting'));

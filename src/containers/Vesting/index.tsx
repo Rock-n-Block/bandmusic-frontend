@@ -11,12 +11,13 @@ import { SingleClaim } from '@/store/Models/Claimer';
 import { formatNumber } from '@/utils';
 
 import s from './Vesting.module.scss';
+import { toJS } from 'mobx';
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
   const { balance, address, isOwner } = useMst().user;
   const { openModal } = useMst().modal;
-  const { claimTokens } = useContractContext();
+  const { claimTokens, getBalance } = useContractContext();
   const { fetchUserData } = useWalletContext();
   const [canClaim, setCanClaim] = useState<SingleClaim[]>([]);
   const [inProcess, setInProcess] = useState<string[]>([]);
@@ -44,8 +45,12 @@ const Vesting: FC = observer(() => {
 
   const claimEvent = useCallback(
     async (amount: string[], timestamp: string[], signature: string[], idx: string[]) => {
-      setInProcess((prev) => [...prev, ...idx]);
-      const removedProcesses = inProcess.filter((p) => idx.includes(p));
+      const newProcesses = [...inProcess, ...idx];
+      setInProcess(newProcesses);
+      const removedProcesses = newProcesses.filter((p) => !idx.includes(p));
+      const canClaimUpdated = canClaim.filter(
+        (c) => newProcesses.findIndex((p) => c.idx === p) === -1,
+      );
       try {
         const transaction = await claimTokens(amount, timestamp, signature, address);
         if (transaction.events) {
@@ -57,9 +62,11 @@ const Vesting: FC = observer(() => {
           }));
           openModal('success', 'RYLT is credited to your wallet');
           await vesting.update_status(data);
+          await getBalance(address, isOwner);
           await fetchUserData(address, isOwner);
         }
         setInProcess(removedProcesses);
+        setCanClaim(canClaimUpdated);
         return true;
       } catch (e) {
         openModal('error', 'Claiming error');
@@ -67,7 +74,7 @@ const Vesting: FC = observer(() => {
         return false;
       }
     },
-    [address, claimTokens, fetchUserData, inProcess, isOwner, openModal],
+    [address, canClaim, claimTokens, fetchUserData, getBalance, inProcess, isOwner, openModal],
   );
 
   const isDisabled = useCallback(

@@ -28,11 +28,11 @@ const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => 
   }
   return newData
     .filter((line: TClaimResponseClaim) => line.status === key)
-    .map((line: TClaimResponseClaim, k: number) => ({
+    .map((line: TClaimResponseClaim) => ({
       amount: String(line.token_amount),
       signature: line.signature,
       timestamp: +line.claimed_at,
-      idx: `${key}${k}`,
+      idx: `${key}${line.stage}`,
       stage: line.stage,
     }));
 };
@@ -93,7 +93,7 @@ const WalletConnectProvider: FC = ({ children }) => {
         );
       } else {
         const rawClaims = await vesting.getData(address);
-        const claims = rawClaims.data[0].claims
+        const claims = rawClaims.data[0]?.claims
           .sort((f: any, s: any) => f.claimed_at - s.claimed_at)
           .map((claim: any, key: number) => ({
             ...claim,

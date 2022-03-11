@@ -2,7 +2,7 @@
 import BigNumber from 'bignumber.js';
 
 import { TLoaded } from '@/store/Models/Owner';
-import { VestingClaimStatus } from '@/types';
+import { TSaleType, VestingClaimStatus } from '@/types';
 import { deNormalizedValue } from '@/utils';
 
 import api from './axios';
@@ -14,6 +14,11 @@ export type TUpdateStatusData = {
   token_amount: number;
   claimed_at: number;
   tx_hash: string;
+};
+
+export type TInitLimit = {
+  limit: string;
+  sale_type: TSaleType;
 };
 
 export default {
@@ -36,4 +41,8 @@ export default {
         sale_type: line.saleType,
       })),
     }),
+  getLimits: () => api.get(`${base}vesting/limits/`),
+  initLimits: (data: TInitLimit) => api.post(`${base}vesting/limits/`, data),
+  editLimits: (data: TInitLimit) => api.patch(`${base}vesting/limits/${data.sale_type}`, data),
+  getStats: () => api.get(`${base}vesting/stats/`),
 };

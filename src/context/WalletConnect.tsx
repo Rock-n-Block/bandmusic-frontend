@@ -49,7 +49,7 @@ const WalletConnectProvider: FC = ({ children }) => {
       if (
         !tokenData ||
         !tokenData.lifetime ||
-        new Date(tokenData.lifetime).getTime() < Date.now()
+        new Date(tokenData.lifetime).getTime() * 1000 < Date.now()
       ) {
         const msg = await login.getMsg();
         const signedMsg = await wcService.signMsg(address, msg.data);

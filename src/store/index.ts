@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import { Instance, types } from 'mobx-state-tree';
 
 import ClaimerInfo from './Models/Claimer';
+import Limits from './Models/Limits';
 import ModalState from './Models/Modal';
 import OwnerInfo from './Models/Owner';
 import User from './Models/User';
@@ -11,6 +12,7 @@ const RootModel = types.model({
   ownerInfo: OwnerInfo,
   claimerInfo: ClaimerInfo,
   modal: ModalState,
+  limits: Limits,
 });
 
 export const Store = RootModel.create({
@@ -34,6 +36,11 @@ export const Store = RootModel.create({
     title: '',
     info: '',
     isActive: false,
+  },
+  limits: {
+    reservedByTypes: [],
+    claimedByTypes: [],
+    limitsByTypes: [],
   },
 });
 

@@ -8,6 +8,7 @@ const generateCSV = () => {
   const addrs = [
     '0x063C22e0917b4B051cb81Ef91c5052Cd8C0D0E56',
     '0xBF7E42e9254A5E64D946bD206120ae5BafaC7781',
+    '0xd1AC91C7151e8A50daC8F1Fb585b75F0065aeaAF',
   ];
   const repeats = 1;
   const delay = 20 * 60;
@@ -15,7 +16,12 @@ const generateCSV = () => {
   const csvData: any[] = [];
   for (let i = 0; i < repeats; i += 1) {
     addrs.forEach((addr) => {
-      csvData.push([addr, 'Pre-sale', getRandomIntInclusive(1, 1000), timestamp + delay * (i + 1)]);
+      csvData.push([
+        addr,
+        'Public sale',
+        getRandomIntInclusive(1, 1000),
+        timestamp + delay * (i + 1),
+      ]);
     });
   }
   const csvExampleText = csvData.reduce(

@@ -5,7 +5,8 @@ import { login } from '@/api';
 import vesting from '@/api/vesting';
 import { WalletService } from '@/servieces';
 import { useMst } from '@/store';
-import { IWalletConnectContext, TAvailableProviders } from '@/types';
+import { TSingleLimit } from '@/store/Models/Limits';
+import { IWalletConnectContext, TAvailableProviders, TSaleType } from '@/types';
 import { logger, normalizedValue } from '@/utils';
 
 import { useContractContext, useModal } from '.';
@@ -20,6 +21,16 @@ type TClaimResponseClaim = {
   signature: string;
   status: string;
   stage: number;
+};
+
+type TLimitsResponse = {
+  sale_type: TSaleType;
+  limit: number | null;
+};
+
+type TSumResponse = {
+  sale_type: TSaleType;
+  sum: number | null;
 };
 
 const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => {
@@ -37,8 +48,22 @@ const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => 
     }));
 };
 
+const normalizeLimitsData: any = (newData: TSumResponse[] & TLimitsResponse[]) => {
+  if (!newData) {
+    return [];
+  }
+  return newData.map((l) => {
+    if (l.sum) {
+      return { saleType: l.sale_type, sum: l.sum ? String(l.sum) : '' };
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return { saleType: l.sale_type, sum: l.limit ? String(l.limit) : '' };
+  });
+};
+
 const WalletConnectProvider: FC = ({ children }) => {
-  const { user, ownerInfo, claimerInfo } = useMst();
+  const { user, ownerInfo, claimerInfo, limits } = useMst();
   const { getOwnerStatus, setProvider, getBalance } = useContractContext();
   const { openModal } = useModal();
 
@@ -85,12 +110,16 @@ const WalletConnectProvider: FC = ({ children }) => {
           loadedFiles.data.map((line: any, key: number) => ({
             amount: normalizedValue(line.tokens_bought),
             timestamp: +line.join_at,
-            address: line.wallet_address,
+            address: line.username,
             saleType: line.sale_type,
             idx: `db${key}`,
             stage: key + 1,
           })),
         );
+        const stats = await vesting.getStats();
+        limits.setReserved(normalizeLimitsData(stats.data.reserved_by_types));
+        limits.setClaimed(normalizeLimitsData(stats.data.claimed_by_types));
+        limits.setLimits(normalizeLimitsData(stats.data.limits_by_types));
       } else {
         const rawClaims = await vesting.getData(address);
         const claims = rawClaims.data[0]?.claims
@@ -104,7 +133,7 @@ const WalletConnectProvider: FC = ({ children }) => {
         claimerInfo.setWaiting(normalizeUserData(claims, 'Waiting'));
       }
     },
-    [claimerInfo, ownerInfo],
+    [claimerInfo, limits, ownerInfo],
   );
 
   const disconnect = useCallback(() => {

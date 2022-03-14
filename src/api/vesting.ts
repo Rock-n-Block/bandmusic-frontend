@@ -28,21 +28,21 @@ export default {
     }),
   getData: (address?: string, status?: VestingClaimStatus) =>
     api.get(
-      `${base}users/?wallet_address=${address?.toLowerCase() || ''}${
+      `${base}users/?username=${address?.toLowerCase() || ''}${
         status ? `&claims__status=${status}` : ''
       }`,
     ),
   sendData: (data: TLoaded) =>
     api.post(`${base}users/`, {
       drop: data.map((line) => ({
-        wallet_address: line.address.toLowerCase(),
+        username: line.address.toLowerCase(),
         join_at: line.timestamp,
         tokens_bought: new BigNumber(deNormalizedValue(line.amount)).toNumber(),
         sale_type: line.saleType,
       })),
     }),
-  getLimits: () => api.get(`${base}vesting/limits/`),
-  initLimits: (data: TInitLimit) => api.post(`${base}vesting/limits/`, data),
-  editLimits: (data: TInitLimit) => api.patch(`${base}vesting/limits/${data.sale_type}`, data),
-  getStats: () => api.get(`${base}vesting/stats/`),
+  getLimits: () => api.get(`${base}limits/`),
+  initLimits: (data: TInitLimit) => api.post(`${base}limits/`, data),
+  editLimits: (data: TInitLimit) => api.patch(`${base}limits/${data.sale_type}`, data),
+  getStats: () => api.get(`${base}stats/`),
 };

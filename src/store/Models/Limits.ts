@@ -6,6 +6,7 @@ const SingleLimit = types.model({
 });
 
 const ListOfSingleLimits = types.array(SingleLimit);
+export type TSingleLimit = Instance<typeof SingleLimit>;
 export type TListOfSingleLimits = Instance<typeof ListOfSingleLimits>;
 
 const Limits = types

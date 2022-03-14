@@ -1,4 +1,6 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useCallback, useEffect, useMemo } from 'react';
+import { NavLink } from 'react-router-dom';
+import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import logo from '@/assets/img/icons/logo.svg';
@@ -7,6 +9,7 @@ import { ReactComponent as WalletConnectSVG } from '@/assets/img/icons/walletcon
 import { Button } from '@/components';
 import { useModal } from '@/context';
 import { useMst } from '@/store';
+import { TAvailableProviders } from '@/types';
 import { splitAddress } from '@/utils';
 
 import { SuccessModal } from '..';
@@ -14,7 +17,6 @@ import { SuccessModal } from '..';
 import { AddressModal, ConnectModal } from './components';
 
 import s from './Header.module.scss';
-import { TAvailableProviders } from '@/types';
 
 const getIcon = (provider: TAvailableProviders) => {
   switch (provider) {
@@ -49,11 +51,32 @@ const Header: FC = observer(() => {
     }
   }, [user.address]);
 
+  const links = useMemo(
+    () => [
+      { link: '/admin', name: 'Vesting', id: 1 },
+      { link: '/limits', name: 'Limits', id: 2 },
+    ],
+    [],
+  );
+
   return (
     <div className={s.header_wrapper}>
       <div className={s.logo}>
         <img src={logo} alt="logo" />
       </div>
+      {user.isOwner && (
+        <div className={s.linkWrapper}>
+          {links.map((l) => (
+            <NavLink
+              className={({ isActive }) => cn(s.link, { [s.active]: isActive })}
+              to={l.link}
+              key={l.id}
+            >
+              {l.name}
+            </NavLink>
+          ))}
+        </div>
+      )}
       {user.address ? (
         <div className={s.connectWrapper}>
           <Button className={s.btn_connected} onClick={openAddress}>

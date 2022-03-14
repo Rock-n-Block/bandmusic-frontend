@@ -205,7 +205,7 @@ const Admin: VFC = observer(() => {
       if ('Transfer' in transaction.events) {
         try {
           const response = await vesting.sendData(currentFiles.content);
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200) {
             openModal('success', 'Your tokens have been successfully distributed');
             await fetchUserData(address, isOwner);
             setCurrentFiles({ name: '', content: cast([]) });

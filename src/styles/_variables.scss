@@ -16,9 +16,10 @@ $gray: #333333;
 $color-accent: #DB0382;
 $text-color: #FFFFFF;
 $text-btn-color-white: #EDF1F7;
-$bg-btn-default: rgba(117, 121, 136, 0.25);
-$border-btn-default: rgba(117, 121, 136, 0.3);
-$color-another-fucking-white-color: #F0F0F0;
+$btn-color: rgb(117, 121, 136);
+$bg-btn-default: rgba($btn-color, 0.25);
+$border-btn-default: rgba($btn-color, 0.3);
+$color-another-interesting-white-color: #F0F0F0;
 $bg-btn-filled-hover: #BD0471;
 $text-btn-disabled: #F0F0F0;
 

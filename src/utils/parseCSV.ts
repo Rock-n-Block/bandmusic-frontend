@@ -19,7 +19,6 @@ const parseCSV = (csv: string[]) => {
       }
       if (
         Number.isNaN(parseInt(timestamp, 10)) ||
-        new Date(parseInt(timestamp, 10) * 1000).getTime() < Date.now() ||
         Number.isNaN(new Date(parseInt(timestamp, 10) * 1000))
       ) {
         errs.push(`error date at line ${key + 1}\n${data}`);

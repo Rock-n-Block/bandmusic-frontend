@@ -18,15 +18,15 @@ export const routes: TSingleRoute[] = [
     require: [],
   },
   {
-    name: 'Admin',
-    path: '/admin',
-    component: <Admin />,
+    name: 'Limits',
+    path: '/limits',
+    component: <Limits />,
     require: ['isOwner'],
   },
   {
-    name: 'Limits',
-    path: '/admin/limits',
-    component: <Limits />,
+    name: 'Admin',
+    path: '/admin',
+    component: <Admin />,
     require: ['isOwner'],
   },
 ];

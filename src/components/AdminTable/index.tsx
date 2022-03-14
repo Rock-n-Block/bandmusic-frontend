@@ -88,7 +88,13 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
                 <td className={s.address}>{line.address}</td>
                 <td>{line.saleType}</td>
                 <td>{new Date(line.timestamp * 1000).toLocaleDateString()}</td>
-                <td>{formatNumber(line.amount.toString())}</td>
+                <td className={s.amount}>
+                  {Number.isNaN(+formatNumber(line.amount.toString())) ? (
+                    <WarningSVG />
+                  ) : (
+                    formatNumber(line.amount.toString())
+                  )}
+                </td>
                 <td className={s.removeCell}>
                   {line.withButton && (
                     <button className={s.remove} type="button" onClick={() => onDelete(line.idx)}>

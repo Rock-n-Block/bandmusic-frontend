@@ -69,6 +69,13 @@
         td {
           padding: 1.25rem 0.625rem;
 
+          &.amount{
+            svg{
+              width: 24px;
+              height: 24px;
+            }
+          }
+
           &.address {
             @include ellipsis;
             @media (max-width: 541px) {

@@ -10,7 +10,7 @@ import api from './axios';
 const base = 'vesting/';
 
 export type TUpdateStatusData = {
-  wallet_address: string;
+  username: string;
   token_amount: number;
   claimed_at: number;
   tx_hash: string;
@@ -24,7 +24,7 @@ export type TInitLimit = {
 export default {
   update_status: (data: TUpdateStatusData[]) =>
     api.post(`${base}status_update/`, {
-      drop: data.map((e) => ({ ...e, username: e.wallet_address })),
+      drop: data,
     }),
   getData: (address?: string, status?: VestingClaimStatus) =>
     api.get(

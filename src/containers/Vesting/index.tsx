@@ -54,7 +54,7 @@ const Vesting: FC = observer(() => {
         const transaction = await claimTokens(amount, timestamp, signature, address);
         if (transaction.events) {
           const data = amount.map<TUpdateStatusData>((a, key) => ({
-            wallet_address: address,
+            username: address,
             token_amount: new BigNumber(a).toNumber(),
             claimed_at: new BigNumber(timestamp[key]).toNumber(),
             tx_hash: transaction.transactionHash,

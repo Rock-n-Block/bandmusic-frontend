@@ -44,7 +44,7 @@ const selectorOptions: TSelectorOption[] = [
 
 const getRequiredTypeValue = (section: TListOfSingleLimits, field: TSaleType) => {
   const obj = section.find((o) => o.saleType === field);
-  return normalizedValue(obj?.sum || '').toString();
+  return normalizedValue(obj?.sum || '0').toString();
 };
 
 const Limits: VFC = () => {
@@ -178,7 +178,8 @@ const Limits: VFC = () => {
                 new BigNumber(newLimit),
               ) ||
               newLimit === getRequiredTypeValue(limits.limitsByTypes, currentType.name) ||
-              isSending
+              isSending ||
+              newLimit.length === 0
             }
             className={s.save}
             color="filled"

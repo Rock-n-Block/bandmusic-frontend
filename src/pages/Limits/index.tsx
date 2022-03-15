@@ -87,7 +87,7 @@ const Limits: VFC = () => {
     <section className={s.limits}>
       <Selector options={selectorOptions} value={currentType} setValue={onOptionClick} />
       <div className={s.left}>
-        <p className={s.leftTitle}>Tokens left to min in RYLT</p>
+        <p className={s.leftTitle}>Tokens left to mint in RYLT</p>
         <p className={s.leftAmount}>
           {formatNumber(
             new BigNumber(newLimit)

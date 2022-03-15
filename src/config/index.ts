@@ -1,4 +1,5 @@
 import { chainsEnum, IChainConfig, IConnectWallet, IContracts } from '@/types';
+
 import { TokenAbi, VestingAbi } from './abi';
 
 export const isProduction = false;
@@ -59,7 +60,7 @@ export const connectWalletConfig: IConnectWallet = {
  * * provider
  * * settings
  */
- export const getConnectWalletConfig = (chainName: chainsEnum): IConnectWallet => {
+export const getConnectWalletConfig = (chainName: chainsEnum): IConnectWallet => {
   return {
     wallets: connectWalletConfig.wallets,
     network: connectWalletConfig.network,

@@ -27,7 +27,7 @@ const getIcon = (provider: TAvailableProviders) => {
       return <WalletConnectSVG />;
     }
     default: {
-      return <WalletConnectSVG />;
+      return null;
     }
   }
 };

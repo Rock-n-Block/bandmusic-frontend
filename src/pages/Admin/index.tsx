@@ -1,5 +1,4 @@
 import { FormEvent, useCallback, useEffect, useRef, useState, VFC } from 'react';
-import BigNumber from 'bignumber.js';
 import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { cast } from 'mobx-state-tree';
@@ -8,17 +7,12 @@ import vesting from '@/api/vesting';
 import { ReactComponent as DeleteSVG } from '@/assets/img/icons/closeLight.svg';
 import { ReactComponent as UploadSVG } from '@/assets/img/icons/upload.svg';
 import { AdminTable, Button } from '@/components';
-import { contracts } from '@/config';
-import { useContractContext, useWalletContext } from '@/context';
+import { useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { TCurrentFile, TLoaded } from '@/store/Models/Owner';
-import { deNormalizedValue, generateCSV, parseCSV } from '@/utils';
+import { generateCSV, parseCSV } from '@/utils';
 
 import s from './styles.module.scss';
-
-const maxTries = 5;
-
-const VestingAddress = contracts.params.VESTING[contracts.type].address;
 
 const getState = (file: File | null, currentFiles: TCurrentFile, loadedFiles: TLoaded) => {
   if (file && !currentFiles.content.length) {
@@ -47,7 +41,7 @@ const getTitle = (state: number) => {
 const getBottomButtonText = (state: number) => {
   switch (state) {
     case 3: {
-      return 'Transfer';
+      return 'Send';
     }
     case 2: {
       return 'Proceed';
@@ -63,7 +57,6 @@ const Admin: VFC = observer(() => {
   const { address, isOwner } = useMst().user;
   const { openModal } = useMst().modal;
   const { fetchUserData } = useWalletContext();
-  const { getBalance, getAllowance, sendApprove, sendTransfer } = useContractContext();
   const [csvFile, setCSVFile] = useState<File | null>(null);
   const [state, setState] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -74,7 +67,6 @@ const Admin: VFC = observer(() => {
     setIsLoading(true);
     const fileReader = new FileReader();
     fileReader.onload = async function () {
-      const currentBalance = await getBalance(address, isOwner).then((val: string) => +val);
       const readResult = fileReader.result as string;
       const csvData = readResult.split('\n');
       const { data, errs } = parseCSV(csvData);
@@ -84,15 +76,11 @@ const Admin: VFC = observer(() => {
           `Uploaded file is incorrect. Please make sure it corresponds with the Sample file.`,
         );
       } else {
-        const totalAmount = data.map((line) => line.amount).reduce((acc, val) => +acc + +val, 0);
         if (errs.length) {
           openModal(
             'warning',
             `Some rows have been removed because of the incorrect data in one or several fields`,
           );
-        }
-        if (new BigNumber(totalAmount).gte(currentBalance)) {
-          openModal('error', `You don't have enough currency, please edit the table`);
         }
         setCurrentFiles({ name: csvFile?.name || 'file', content: cast(data) });
       }
@@ -101,7 +89,7 @@ const Admin: VFC = observer(() => {
     if (csvFile) {
       fileReader.readAsText(csvFile);
     }
-  }, [address, csvFile, getBalance, isOwner, openModal, setCurrentFiles]);
+  }, [csvFile, openModal, setCurrentFiles]);
 
   const onSample = useCallback(() => {
     setCSVFile(generateCSV());
@@ -154,87 +142,21 @@ const Admin: VFC = observer(() => {
   );
 
   const onServerUpload = useCallback(async () => {
-    let tries = 0;
     setIsLoading(true);
-    const needAmount = currentFiles.content
-      .map((el) => el.amount)
-      .reduce((acc, val) => +acc + +val, 0);
-    const checkAllowance = async (onAllowance: () => void) => {
-      try {
-        const allowance = await getAllowance(address, VestingAddress);
-        console.log(allowance, needAmount);
-        if (new BigNumber(allowance).gte(needAmount)) {
-          onAllowance();
-        } else if (tries <= maxTries) {
-          tries += 1;
-          try {
-            const approved = await sendApprove(
-              VestingAddress,
-              deNormalizedValue(needAmount),
-              address,
-            );
-            if (approved) {
-              checkAllowance(onAllowance);
-            } else {
-              openModal('error', `You doesn't approve transaction`);
-            }
-            setIsLoading(false);
-          } catch (e) {
-            openModal('error', 'Approving error. Try again later');
-            setIsLoading(false);
-          }
-        } else {
-          openModal(
-            'error',
-            `You have been reached maximum tries of approving. Please, try again later`,
-          );
-          setIsLoading(false);
-        }
-      } catch (e) {
-        openModal('error', 'Allowing error. Try again later');
-        setIsLoading(false);
+    try {
+      const response = await vesting.sendData(currentFiles.content);
+      if (response.status === 201 || response.status === 200) {
+        openModal('success', 'Your tokens have been successfully distributed');
+        await fetchUserData(address, isOwner);
+        setCurrentFiles({ name: '', content: cast([]) });
+        setCSVFile(null);
       }
-    };
-    const onAllowance = async () => {
-      setIsLoading(true);
-      const transaction = await sendTransfer(
-        VestingAddress,
-        deNormalizedValue(needAmount),
-        address,
-      );
-      if ('Transfer' in transaction.events) {
-        try {
-          const response = await vesting.sendData(currentFiles.content);
-          if (response.status === 201 || response.status === 200) {
-            openModal('success', 'Your tokens have been successfully distributed');
-            await fetchUserData(address, isOwner);
-            setCurrentFiles({ name: '', content: cast([]) });
-            setCSVFile(null);
-          } else {
-            openModal('error', 'Server error');
-          }
-          setIsLoading(false);
-        } catch (e) {
-          openModal('error', 'Server error');
-          setIsLoading(false);
-        }
-      } else {
-        openModal('error', 'Transaction error. Try again late');
-        setIsLoading(false);
-      }
-    };
-    checkAllowance(onAllowance);
-  }, [
-    address,
-    currentFiles.content,
-    fetchUserData,
-    getAllowance,
-    isOwner,
-    openModal,
-    sendApprove,
-    sendTransfer,
-    setCurrentFiles,
-  ]);
+      setIsLoading(false);
+    } catch (e) {
+      openModal('error', 'Server error');
+      setIsLoading(false);
+    }
+  }, [address, currentFiles.content, fetchUserData, isOwner, openModal, setCurrentFiles]);
 
   useEffect(() => {
     setState(getState(csvFile, currentFiles, loadedFiles));

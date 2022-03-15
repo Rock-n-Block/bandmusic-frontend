@@ -79,7 +79,7 @@ export const contracts: IContracts = {
         abi: VestingAbi,
       },
       testnet: {
-        address: '0x377e7646c3c11253B92DC181c60a4E23b56aF3e3',
+        address: '0xbafB6B6F7b96e4fc6517D8687181340Bd62e5e55',
         abi: VestingAbi,
       },
     },

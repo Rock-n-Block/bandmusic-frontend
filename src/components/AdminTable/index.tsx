@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState, VFC } from 'react';
 
 import { ReactComponent as WarningSVG } from '@/assets/img/icons/warning.svg';
-import { useMst } from '@/store';
 import { TFileLine } from '@/store/Models/Owner';
 import { formatNumber } from '@/utils';
 
@@ -16,10 +15,6 @@ interface ITable {
 const countOnPage = 6;
 const maxPagin = 8;
 
-const calcTotal = (data: TFileLine[]) => {
-  return data.map((line) => +line.amount).reduce((acc, val) => acc + val, 0);
-};
-
 const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
   const [mergedData, setMergedData] = useState([
     ...data.map((l) => ({ ...l, withButton: true })),
@@ -29,14 +24,6 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
   const [paginData, setPaginData] = useState(
     mergedData?.slice(currentPage, (currentPage + 1) * countOnPage),
   );
-  const { balance } = useMst().user;
-  const [total, setTotal] = useState(calcTotal(data || []));
-
-  useEffect(() => {
-    if (data) {
-      setTotal(calcTotal(data));
-    }
-  }, [data, data.length]);
 
   useEffect(() => {
     if (data.length || baseData.length) {
@@ -134,13 +121,6 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
             {'>'}{' '}
           </button>
         </div>
-        {balance && total > 0 && (
-          <div className={s.bal}>
-            <span className={`${s.balance} ${+balance < total && s.low}`}>
-              Balance/Total {formatNumber(balance)}/{formatNumber(total.toString())}
-            </span>
-          </div>
-        )}
       </div>
       {baseData.length > 0 && (
         <div className={s.baseData}>

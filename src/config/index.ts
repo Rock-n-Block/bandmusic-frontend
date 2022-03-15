@@ -78,7 +78,7 @@ export const contracts: IContracts = {
         abi: VestingAbi,
       },
       testnet: {
-        address: '0xF43D6b0c53e7Ec72593dDA2441C38525d0E759a8',
+        address: '0x377e7646c3c11253B92DC181c60a4E23b56aF3e3',
         abi: VestingAbi,
       },
     },
@@ -88,7 +88,7 @@ export const contracts: IContracts = {
         abi: TokenAbi,
       },
       testnet: {
-        address: '0x3049a000BC6D0403623516e44bC47BA381dB5797',
+        address: '0xB8345f0eBE4AFc1fc49C9825d7a57CF322a915eD',
         abi: TokenAbi,
       },
     },

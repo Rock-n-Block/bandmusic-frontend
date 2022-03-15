@@ -24,7 +24,7 @@ export type TInitLimit = {
 export default {
   update_status: (data: TUpdateStatusData[]) =>
     api.post(`${base}status_update/`, {
-      drop: data,
+      drop: data.map((e) => ({ ...e, username: e.wallet_address })),
     }),
   getData: (address?: string, status?: VestingClaimStatus) =>
     api.get(

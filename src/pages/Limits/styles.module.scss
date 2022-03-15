@@ -20,7 +20,16 @@
           font-size: 16px;
           line-height: 24px;
         }
+        &Amount{
+          margin: 10px 0;
+        }
       }
+    }
+    &Mint{
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: normal;
+      padding: 7.5px 15px;
     }
   }
   &Main {

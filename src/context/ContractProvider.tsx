@@ -5,7 +5,7 @@ import { contracts } from '@/config';
 import { ContractService } from '@/servieces';
 import { useMst } from '@/store';
 import { IContractContext } from '@/types';
-import { normalizedValue } from '@/utils';
+import { deNormalizedValue, normalizedValue } from '@/utils';
 
 const ContractContext = createContext<IContractContext>({} as IContractContext);
 const DEFAULT_ADMIN_ROLE = '0x0000000000000000000000000000000000000000000000000000000000000000';
@@ -47,6 +47,16 @@ const ContractProvider: FC = ({ children }) => {
       return balance;
     },
     [tokenContract.methods, user],
+  );
+
+  const mintRest = useCallback(
+    async (amount: string, address: string) => {
+      const res = await tokenContract.methods
+        .mintTo(address, deNormalizedValue(amount))
+        .send({ from: address });
+      return res;
+    },
+    [tokenContract.methods],
   );
 
   const getAllowance = useCallback(
@@ -111,8 +121,18 @@ const ContractProvider: FC = ({ children }) => {
       claimTokens,
       sendTransfer,
       setProvider,
+      mintRest,
     }),
-    [claimTokens, getAllowance, setProvider, getBalance, getOwnerStatus, sendApprove, sendTransfer],
+    [
+      getOwnerStatus,
+      getBalance,
+      getAllowance,
+      sendApprove,
+      claimTokens,
+      sendTransfer,
+      setProvider,
+      mintRest,
+    ],
   );
   return <ContractContext.Provider value={values}>{children}</ContractContext.Provider>;
 };

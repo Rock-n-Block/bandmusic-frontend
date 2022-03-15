@@ -1,15 +1,23 @@
-import { useCallback, useEffect, useState, VFC } from 'react';
+import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { vesting } from '@/api';
 import { Button, CircleProgress, DefaultInput, Selector } from '@/components';
-import { useWalletContext } from '@/context';
+import { useContractContext, useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { TListOfSingleLimits } from '@/store/Models/Limits';
 import { TSaleType, TSelectorOption } from '@/types';
-import { formatNumber } from '@/utils';
+import { formatNumber, normalizedValue } from '@/utils';
 
 import s from './styles.module.scss';
+
+const mintedDates = {
+  'Public sale': new Date(2023, 11, 31).getTime(),
+  'Airdrop': new Date(2023, 11, 31).getTime(),
+  'Team': new Date(2024, 11, 31).getTime(),
+  'Promotes': new Date(2024, 11, 31).getTime(),
+  'Advisor': new Date(2024, 11, 31).getTime(),
+};
 
 const selectorOptions: TSelectorOption[] = [
   {
@@ -36,7 +44,7 @@ const selectorOptions: TSelectorOption[] = [
 
 const getRequiredTypeValue = (section: TListOfSingleLimits, field: TSaleType) => {
   const obj = section.find((o) => o.saleType === field);
-  return obj?.sum || '';
+  return normalizedValue(obj?.sum || '').toString();
 };
 
 const Limits: VFC = () => {
@@ -44,6 +52,7 @@ const Limits: VFC = () => {
   const [currentType, setCurrentType] = useState<TSelectorOption>({ name: 'Public sale', id: 1 });
   const [isSending, setIsSending] = useState<boolean>(false);
   const { fetchUserData } = useWalletContext();
+  const { mintRest } = useContractContext();
   const { openModal } = useMst().modal;
   const [newLimit, setNewLimit] = useState<string>(
     getRequiredTypeValue(limits.limitsByTypes, currentType.name),
@@ -83,19 +92,40 @@ const Limits: VFC = () => {
     user.isOwner,
   ]);
 
+  const leftToMint = useMemo(
+    () =>
+      new BigNumber(newLimit)
+        .minus(getRequiredTypeValue(limits.claimedByTypes, currentType.name))
+        .toString(),
+    [currentType.name, limits.claimedByTypes, newLimit],
+  );
+
+  const onMintTheRestClick = useCallback(async () => {
+    try {
+      await mintRest(
+        new BigNumber(user.balance).gte(leftToMint) ? leftToMint : user.balance,
+        user.address,
+      );
+      openModal('success', 'Minted successfully');
+    } catch (e) {
+      openModal('error', 'Internal error');
+    }
+  }, [leftToMint, mintRest, openModal, user.address, user.balance]);
+
   return (
     <section className={s.limits}>
       <Selector options={selectorOptions} value={currentType} setValue={onOptionClick} />
       <div className={s.left}>
         <p className={s.leftTitle}>Tokens left to mint in RYLT</p>
-        <p className={s.leftAmount}>
-          {formatNumber(
-            new BigNumber(newLimit)
-              .minus(getRequiredTypeValue(limits.claimedByTypes, currentType.name))
-              .toString(),
-            'compact',
-          )}
-        </p>
+        <p className={s.leftAmount}>{formatNumber(leftToMint, 'compact')}</p>
+        <Button
+          color="filled"
+          disabled={mintedDates[currentType.name] >= Date.now() || +leftToMint === 0}
+          className={s.leftMint}
+          onClick={onMintTheRestClick}
+        >
+          Mint the rest
+        </Button>
       </div>
       <section className={s.limitsMain}>
         <div className={s.pie}>

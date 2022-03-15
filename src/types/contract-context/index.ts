@@ -13,4 +13,5 @@ export interface IContractContext {
   ) => Promise<any>;
   sendTransfer: (to: string, amount: string, address: string) => Promise<any>;
   setProvider: (newWeb: Web3) => void;
+  mintRest: (amount: string, address: string) => Promise<any>;
 }

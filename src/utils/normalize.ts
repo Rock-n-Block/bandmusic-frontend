@@ -5,7 +5,7 @@ import { chain } from '@/config';
 const contracts = chain.nativeCurrency;
 
 export const normalizedValue = (
-  value: string | number,
+  value: string | number | BigNumber,
   fixed?: number,
   number = false,
   decimal = contracts?.decimals || 18,

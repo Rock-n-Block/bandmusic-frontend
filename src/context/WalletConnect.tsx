@@ -48,13 +48,16 @@ const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => 
     }));
 };
 
-const normalizeLimitsData: any = (newData: TSumResponse[] & TLimitsResponse[]) => {
+const normalizeLimitsData: any = (newData: any) => {
   if (!newData) {
     return [];
   }
-  return newData.map((l) => {
+  return newData.map((l: any) => {
     if (l.sum) {
-      return { saleType: l.sale_type, sum: l.sum ? String(l.sum) : '' };
+      if (l.sale_type) {
+        return { saleType: l.sale_type, sum: l.sum ? String(l.sum) : '' };
+      }
+      return { saleType: l.user__sale_type, sum: l.sum ? String(l.sum) : '' };
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

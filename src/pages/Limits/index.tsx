@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import BigNumber from 'bignumber.js';
-
 import { vesting } from '@/api';
 import { Button, CircleProgress, DefaultInput, Selector } from '@/components';
 import { useContractContext, useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { TListOfSingleLimits } from '@/store/Models/Limits';
 import { TSaleType, TSelectorOption } from '@/types';
-import { formatNumber, normalizedValue } from '@/utils';
+import { deNormalizedValue, formatNumber, normalizedValue } from '@/utils';
 
 import s from './styles.module.scss';
 
@@ -44,7 +43,10 @@ const selectorOptions: TSelectorOption[] = [
 
 const getRequiredTypeValue = (section: TListOfSingleLimits, field: TSaleType) => {
   const obj = section.find((o) => o.saleType === field);
-  return normalizedValue(obj?.sum || '0').toString();
+  if (obj?.sum) {
+    return normalizedValue(obj.sum);
+  }
+  return '0';
 };
 
 const Limits: VFC = () => {
@@ -55,7 +57,7 @@ const Limits: VFC = () => {
   const { mintRest } = useContractContext();
   const { openModal } = useMst().modal;
   const [newLimit, setNewLimit] = useState<string>(
-    getRequiredTypeValue(limits.limitsByTypes, currentType.name),
+    getRequiredTypeValue(limits.limitsByTypes, currentType.name).toString(),
   );
 
   const setLimitHandler = useCallback((val: string) => {
@@ -67,20 +69,25 @@ const Limits: VFC = () => {
   }, []);
 
   useEffect(() => {
-    setNewLimit(getRequiredTypeValue(limits.limitsByTypes, currentType.name));
+    setNewLimit(getRequiredTypeValue(limits.limitsByTypes, currentType.name).toString());
   }, [currentType, limits.limitsByTypes]);
 
   const onSaveClick = useCallback(async () => {
     setIsSending(true);
     const prevLimit = getRequiredTypeValue(limits.limitsByTypes, currentType.name);
-    const newLimitObj = { sale_type: currentType.name, limit: newLimit };
-    const res = await vesting[+prevLimit ? 'editLimits' : 'initLimits'](newLimitObj);
-    if (res.status === 201 || res.status === 200) {
-      openModal('success', `Limit for ${currentType.name} has been set successfully`);
-      fetchUserData(user.address, user.isOwner);
-    } else {
+    const newLimitObj = { sale_type: currentType.name, limit: deNormalizedValue(newLimit) };
+    try {
+      const res = await vesting[+prevLimit ? 'editLimits' : 'initLimits'](newLimitObj);
+      if (res.status === 201 || res.status === 200) {
+        openModal('success', `Limit for ${currentType.name} has been set successfully`);
+        fetchUserData(user.address, user.isOwner);
+      } else {
+        openModal('error', `Server error`);
+      }
+    } catch (e) {
       openModal('error', `Server error`);
     }
+
     setIsSending(false);
   }, [
     currentType.name,

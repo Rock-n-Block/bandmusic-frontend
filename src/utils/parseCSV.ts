@@ -9,6 +9,7 @@ const parseCSV = (csv: string[]) => {
   const errs: string[] = [];
   csv.forEach((line, key) => {
     if (csv.length > 0) {
+      if (line.length === 0) return;
       const [address, type, amount, timestamp] = line
         .replaceAll('"', '')
         .replaceAll(';', ',')

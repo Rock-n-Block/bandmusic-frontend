@@ -15,8 +15,8 @@ const mintedDates = {
   'Public sale': new Date(2023, 11, 31).getTime(),
   'Airdrop': new Date(2023, 11, 31).getTime(),
   'Team': new Date(2024, 11, 31).getTime(),
-  'Promotes': new Date(2024, 11, 31).getTime(),
-  'Advisor': new Date(2024, 11, 31).getTime(),
+  'Promoters': new Date(2024, 11, 31).getTime(),
+  'Advisors': new Date(2024, 11, 31).getTime(),
 };
 
 const selectorOptions: TSelectorOption[] = [
@@ -29,11 +29,11 @@ const selectorOptions: TSelectorOption[] = [
     id: 2,
   },
   {
-    name: 'Promotes',
+    name: 'Promoters',
     id: 3,
   },
   {
-    name: 'Advisor',
+    name: 'Advisors',
     id: 4,
   },
   {

@@ -1,0 +1,126 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.header_wrapper {
+  padding: 40px 0;
+  @include flex(row, center, space-between, nowrap);
+  .logo {
+    max-width: 131px;
+  }
+  .link{
+    &Wrapper{
+      @include flex(row, center, flex-end);
+      margin-left: auto;
+    }
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
+    color: $text-color;
+    margin-right: 40px;
+    position: relative;
+    overflow: hidden;
+    @include transition;
+    &:after{
+      position: absolute;
+      content: '';
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $color-accent;
+      transform: translateY(2px);
+      @include transition;
+    }
+    &.active{
+      color: rgba($color-accent, 0.9);
+      &:after{
+        transform: translateY(0);
+      }
+    }
+  }
+  .connectWrapper{
+    position: relative;
+    .disconnect{
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 0;
+      width: 100%;
+      max-height: 0;
+      overflow: hidden;
+      @include transition;
+      &.active{
+        max-height: 200px;
+      }
+    }
+  }
+  .btn {
+    padding: 24px 167px;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 0.015em;
+    text-transform: uppercase;
+    color: $text-btn-color-white;
+    &_disconnected{
+      padding: 24px 167px;
+      font-size: 20px;
+      letter-spacing: 0.015em;
+      text-transform: uppercase;
+      width: 100%;
+    }
+  }
+  .btn_connected {
+    min-width: 529px;
+    padding: 12px 18px;
+    @include flex(row, center, flex-start, nowrap);
+    .icon {
+      width: 53px;
+      height: 48px;
+      margin-right: 24px;
+      @include flex(row, center, center);
+      img {
+        width: 100%;
+      }
+    }
+    .text {
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 29px;
+      text-transform: none;
+    }
+    .mobileText{
+      display: none;
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 29px;
+      text-transform: none;
+    }
+  }
+}
+
+@media (max-width: 830px){
+  .header_wrapper{
+    @include flex(column, center, flex-start, nowrap);
+    .link{
+      &Wrapper{
+        margin: 10px 0;
+        @include flex(row, center, flex-end);
+        margin-left: 0;
+      }
+      margin-right: 0;
+      &:not(:last-child){
+        margin-right: 40px;
+      }
+    }
+    .btn_connected{
+      margin-top: 20px;
+      min-width: 0;
+      .text{
+        display: none;
+      }
+      .mobileText{
+        display: inline-block;
+      }
+    }
+  }
+}

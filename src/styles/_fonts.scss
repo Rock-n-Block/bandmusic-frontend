@@ -1,0 +1,6 @@
+@import 'mixins/helpers';
+
+@include font-face('Inter', '../../assets/fonts/Inter-Light', 300, normal, 'ttf');
+@include font-face('Inter', '../../assets/fonts/Inter-Regular', 400, normal, 'ttf');
+@include font-face('Inter', '../../assets/fonts/Inter-Medium', 500, normal, 'ttf');
+@include font-face('Inter', '../../assets/fonts/Inter-Black', 900, normal, 'ttf');

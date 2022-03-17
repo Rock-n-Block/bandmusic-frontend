@@ -1,0 +1,67 @@
+@import '@/styles/variables';
+@import '@/styles/mixins';
+
+.modal_wrapper {
+  width: 100%;
+  max-width: 619px;
+  min-height: 619px;
+  @include flex(row, center, center);
+}
+
+.success_modal_wrapper {
+  padding: 85px 69px 73px 86px;
+  @include flex(column, center);
+
+  .loading {
+    animation-name: spin;
+    animation-duration: 2000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  .icon {
+    margin-bottom: 30px;
+  }
+  .title {
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 55px;
+    margin-bottom: 54px;
+    text-align: center;
+  }
+  .btn {
+    min-width: 273px;
+    text-transform: uppercase;
+    padding: 25px 54px 26px;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 541px){
+  .modal_wrapper{
+    max-height: fit-content;
+  }
+  .success_modal_wrapper{
+    padding: 30px 20px;
+    .icon {
+      max-width: 150px;
+    }
+    .title {
+      font-size: 28px;
+      line-height: 34px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .btn{
+      min-width: 100%;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, VFC } from 'react';
 import BigNumber from 'bignumber.js';
+
 import { vesting } from '@/api';
 import { Button, CircleProgress, DefaultInput, Selector } from '@/components';
 import { useContractContext, useWalletContext } from '@/context';
@@ -139,8 +140,9 @@ const Limits: VFC = () => {
           <span>Minted/Reserved</span>
           <CircleProgress
             percentage={
-              +getRequiredTypeValue(limits.claimedByTypes, currentType.name) /
-              +getRequiredTypeValue(limits.reservedByTypes, currentType.name)
+              (+getRequiredTypeValue(limits.claimedByTypes, currentType.name) /
+                +getRequiredTypeValue(limits.reservedByTypes, currentType.name)) *
+              100
             }
             color="#DB0382"
           />

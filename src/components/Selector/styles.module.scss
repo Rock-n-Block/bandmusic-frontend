@@ -55,5 +55,11 @@
     &Head{
       min-width: 100%;
     }
+    &Body{
+      background-color: $admin-modal-background;
+    }
+    &Option{
+      color: $gray;
+    }
   }
 }

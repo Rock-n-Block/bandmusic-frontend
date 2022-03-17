@@ -124,3 +124,15 @@
     }
   }
 }
+
+@media screen and (max-width: 541px) {
+  .header_wrapper {
+    .connectWrapper{
+      .btn_connected{
+        .icon{
+          margin-right: 12px;
+        }
+      }
+    }
+  }
+}

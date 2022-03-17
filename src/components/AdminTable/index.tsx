@@ -5,7 +5,7 @@ import { TFileLine } from '@/store/Models/Owner';
 import { formatNumber } from '@/utils';
 
 import s from './styles.module.scss';
-import { toJS } from 'mobx';
+
 
 interface ITable {
   data: TFileLine[];
@@ -56,7 +56,6 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
   useEffect(() => {
     setPaginData(mergedData?.slice(currentPage * countOnPage, (currentPage + 1) * countOnPage));
   }, [currentPage, mergedData]);
-  console.log(toJS(data));
   return (
     <div className={`${s.wrapper} ${s.tableWrap}`}>
       <div className={s.scrollableTable}>

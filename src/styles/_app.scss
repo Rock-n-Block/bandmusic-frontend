@@ -103,24 +103,3 @@ a, input, textarea, button {font-family: inherit}
     padding: 0 15px;
   }
 }
-.page_wrapper {
-  position: relative;
-  z-index: 10;
-  max-width: 1440px;
-  width: 100%;
-  min-height: 100vh;
-  margin: 0 auto;
-  padding: 0 73px;
-}
-
-@media (max-width: 768px) {
-  .page_wrapper{
-    padding: 0 35px;
-  }
-}
-
-@media (max-width: 541px){
-  .page_wrapper{
-    padding: 0 30px;
-  }
-}

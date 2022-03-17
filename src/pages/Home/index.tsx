@@ -1,4 +1,5 @@
 import { FC, useCallback, useState } from 'react';
+import cn from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import homeImg from '@/assets/img/home.png';
@@ -17,7 +18,7 @@ const Home: FC = observer(() => {
   }, []);
 
   return (
-    <div className={s.home_wrapper}>
+    <div className={cn(s.home_wrapper, { [s.vesting]: vesting })}>
       <h1 className={s.title}>
         $RYLT Token <span>Holders Access</span> Your Tokens Here
       </h1>

@@ -23,11 +23,7 @@
     max-height: 0;
     overflow: hidden;
     border-radius: 18px;
-<<<<<<< HEAD
     background-color: rgba($btn-color, 0.4);
-=======
-    background-color: $bg-btn-default;
->>>>>>> b7eda040450995243dcf72fbe5b47696de358317
     backdrop-filter: blur(16px);
     @include transition;
     @include flex(column, center, flex-start, nowrap);

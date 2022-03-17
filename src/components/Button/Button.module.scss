@@ -11,7 +11,10 @@
   @include flex(row, center, center, nowrap);
   box-sizing: border-box;
   color: $text-btn-color-white;
+<<<<<<< HEAD
   overflow: hidden;
+=======
+>>>>>>> b7eda040450995243dcf72fbe5b47696de358317
   @include transition;
 
   &.default {
@@ -95,8 +98,11 @@
       font-size: 20px;
       line-height: 24px;
     }
+<<<<<<< HEAD
     &.filled{
       padding: 10px 14px;
     }
+=======
+>>>>>>> b7eda040450995243dcf72fbe5b47696de358317
   }
 }

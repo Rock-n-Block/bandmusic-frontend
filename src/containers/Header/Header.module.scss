@@ -96,6 +96,7 @@
       text-transform: none;
     }
   }
+<<<<<<< HEAD
 }
 
 @media (max-width: 830px){
@@ -132,6 +133,35 @@
         .icon{
           margin-right: 12px;
         }
+      }
+    }
+  }
+=======
+>>>>>>> b7eda040450995243dcf72fbe5b47696de358317
+}
+
+@media (max-width: 830px){
+  .header_wrapper{
+    @include flex(column, center, flex-start, nowrap);
+    .link{
+      &Wrapper{
+        margin: 10px 0;
+        @include flex(row, center, flex-end);
+        margin-left: 0;
+      }
+      margin-right: 0;
+      &:not(:last-child){
+        margin-right: 40px;
+      }
+    }
+    .btn_connected{
+      margin-top: 20px;
+      min-width: 0;
+      .text{
+        display: none;
+      }
+      .mobileText{
+        display: inline-block;
       }
     }
   }

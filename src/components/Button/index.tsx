@@ -36,6 +36,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
   onMouseLeave,
   onMouseOver = () => {},
   isLoading = false,
+  style,
 }) => {
   if (href)
     return (
@@ -46,6 +47,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
           [s.disabled]: disabled || color === 'disabled',
         })}
         rel="noreferrer"
+        style={style}
       >
         {isLoading ? <Loader /> : children}
       </a>
@@ -57,6 +59,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
         className={cn(className, s.button, s[color], {
           [s.disabled]: disabled || color === 'disabled',
         })}
+        style={style}
       >
         {isLoading ? <Loader /> : children}
       </Link>
@@ -72,6 +75,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
       disabled={disabled}
       onMouseLeave={onMouseLeave}
       onMouseEnter={onMouseOver}
+      style={style}
     >
       {isLoading ? <Loader /> : children}
     </button>

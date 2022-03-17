@@ -5,7 +5,6 @@ import { login } from '@/api';
 import vesting from '@/api/vesting';
 import { WalletService } from '@/servieces';
 import { useMst } from '@/store';
-import { TSingleLimit } from '@/store/Models/Limits';
 import { IWalletConnectContext, TAvailableProviders, TSaleType } from '@/types';
 import { logger, normalizedValue } from '@/utils';
 
@@ -21,16 +20,6 @@ type TClaimResponseClaim = {
   signature: string;
   status: string;
   stage: number;
-};
-
-type TLimitsResponse = {
-  sale_type: TSaleType;
-  limit: number | null;
-};
-
-type TSumResponse = {
-  sale_type: TSaleType;
-  sum: number | null;
 };
 
 const normalizeUserData: any = (newData: TClaimResponseClaim[], key: string) => {

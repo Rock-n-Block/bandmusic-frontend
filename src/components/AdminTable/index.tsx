@@ -5,6 +5,7 @@ import { TFileLine } from '@/store/Models/Owner';
 import { formatNumber } from '@/utils';
 
 import s from './styles.module.scss';
+import { toJS } from 'mobx';
 
 interface ITable {
   data: TFileLine[];
@@ -55,7 +56,7 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
   useEffect(() => {
     setPaginData(mergedData?.slice(currentPage * countOnPage, (currentPage + 1) * countOnPage));
   }, [currentPage, mergedData]);
-
+  console.log(toJS(data));
   return (
     <div className={`${s.wrapper} ${s.tableWrap}`}>
       <div className={s.scrollableTable}>
@@ -74,7 +75,7 @@ const Table: VFC<ITable> = ({ data, baseData, onDelete }) => {
               <tr key={line.idx}>
                 <td className={s.address}>{line.address}</td>
                 <td>{line.saleType}</td>
-                <td>{new Date(line.timestamp * 1000).toLocaleDateString()}</td>
+                <td>{new Date(new Date(line.timestamp).getTime() * 1000).toLocaleDateString()}</td>
                 <td className={s.amount}>
                   {Number.isNaN(+formatNumber(line.amount.toString())) ? (
                     <WarningSVG />

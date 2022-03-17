@@ -9,7 +9,7 @@ const parseCSV = (csv: string[]) => {
   const errs: string[] = [];
   csv.forEach((line, key) => {
     if (csv.length > 0) {
-      if (line.length === 0) return;
+      if (line.replaceAll(' ', '').replaceAll('\r', '').length === 0) return;
       const [address, type, amount, timestamp] = line
         .replaceAll('"', '')
         .replaceAll(';', ',')
@@ -38,7 +38,7 @@ const parseCSV = (csv: string[]) => {
         data.push({
           address,
           saleType: type,
-          timestamp: +(new Date(timestamp).getTime() / 1000).toFixed(0),
+          timestamp: +new Date(+timestamp).getTime() || +(new Date(timestamp).getTime() / 1000),
           amount,
           idx: `new${key}`,
         });

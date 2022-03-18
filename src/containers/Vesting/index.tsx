@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite';
 
 import vesting, { TUpdateStatusData } from '@/api/vesting';
 import { Button } from '@/components';
-import { Timer } from '@/containers';
-import { useContractContext, useWalletContext } from '@/context';
+import { SuccessModal, Timer } from '@/containers';
+import { useContractContext, useModal, useWalletContext } from '@/context';
 import { useMst } from '@/store';
 import { SingleClaim } from '@/store/Models/Claimer';
 import { formatNumber } from '@/utils';
@@ -15,13 +15,15 @@ import s from './Vesting.module.scss';
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
   const { balance, address, isOwner } = useMst().user;
-  const { openModal } = useMst().modal;
+  const { modal } = useMst();
   const { claimTokens, getBalance } = useContractContext();
   const { fetchUserData } = useWalletContext();
   const [canClaim, setCanClaim] = useState<SingleClaim[]>([]);
   const [inProcess, setInProcess] = useState<string[]>([]);
   const [isClaimAllActive, setIsClaimAllActive] = useState(canClaim.length !== 0);
   const timer = useRef<NodeJS.Timer | null>(null);
+
+  const { openModal, closeModal, isOpen } = useModal();
 
   useEffect(() => {
     setIsClaimAllActive(canClaim.length >= 2);
@@ -59,7 +61,7 @@ const Vesting: FC = observer(() => {
             claimed_at: new BigNumber(timestamp[key]).toNumber(),
             tx_hash: transaction.transactionHash,
           }));
-          openModal('success', 'RYLT is credited to your wallet');
+          openModal('successClaimed');
           await vesting.update_status(data);
           await getBalance(address, isOwner);
           await fetchUserData(address, isOwner);
@@ -68,12 +70,12 @@ const Vesting: FC = observer(() => {
         setCanClaim(canClaimUpdated);
         return true;
       } catch (e) {
-        openModal('error', 'Claiming error');
+        modal.openModal('error', 'Claiming error');
         setInProcess(removedProcesses);
         return false;
       }
     },
-    [address, canClaim, claimTokens, fetchUserData, getBalance, inProcess, isOwner, openModal],
+    [address, canClaim, claimTokens, fetchUserData, getBalance, inProcess, isOwner, modal, openModal],
   );
 
   const isDisabled = useCallback(
@@ -189,6 +191,11 @@ const Vesting: FC = observer(() => {
           </div>
         ))}
       </div>
+      <SuccessModal
+        visible={isOpen('successClaimed')}
+        text="RYLT is credited to your wallet"
+        onClose={() => closeModal('successClaimed')}
+      />
     </div>
   );
 });

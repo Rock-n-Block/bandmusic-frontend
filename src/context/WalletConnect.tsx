@@ -5,7 +5,7 @@ import { login } from '@/api';
 import vesting from '@/api/vesting';
 import { WalletService } from '@/servieces';
 import { useMst } from '@/store';
-import { IWalletConnectContext, TAvailableProviders, TSaleType } from '@/types';
+import { IWalletConnectContext, TAvailableProviders } from '@/types';
 import { logger, normalizedValue } from '@/utils';
 
 import { useContractContext, useModal } from '.';
@@ -76,7 +76,7 @@ const WalletConnectProvider: FC = ({ children }) => {
             'bandmusic_token',
             JSON.stringify({
               token: loginData.data.key,
-              lifetime: Date.now() + tokenLifeTime,
+              lifetime: +(Date.now() / 1000) + tokenLifeTime,
             }),
           );
           user.setUser({ balance: '0', address });
@@ -128,26 +128,30 @@ const WalletConnectProvider: FC = ({ children }) => {
     [claimerInfo, limits, ownerInfo],
   );
 
-  const disconnect = useCallback(() => {
-    localStorage.removeItem('bandmusic-wallet');
+  const clearLocalData = useCallback(() => {
     localStorage.removeItem('bandmusic_token');
     wcService.logOut();
     user.setUser({ address: '', balance: '' });
     user.setIsOwner(false);
-    user.setProvider('');
     ownerInfo.setCurrentFiles({ name: '', content: cast([]) });
   }, [ownerInfo, user]);
 
+  const disconnect = useCallback(() => {
+    localStorage.removeItem('bandmusic-wallet');
+    user.setProvider('');
+    clearLocalData();
+  }, [clearLocalData, user]);
+
   const onAccountChange = useCallback(
     async (address: string) => {
-      disconnect();
+      clearLocalData();
       const isOwner = await getOwnerStatus(address);
       const logged = await loginUser(address, isOwner);
       if (logged) {
         await fetchUserData(address, isOwner);
       }
     },
-    [disconnect, fetchUserData, getOwnerStatus, loginUser],
+    [clearLocalData, fetchUserData, getOwnerStatus, loginUser],
   );
   const connect = useCallback(
     async (wallet: TAvailableProviders) => {

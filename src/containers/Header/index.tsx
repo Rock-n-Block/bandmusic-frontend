@@ -27,13 +27,13 @@ const getIcon = (provider: TAvailableProviders) => {
       return <WalletConnectSVG />;
     }
     default: {
-      return null;
+      return <MetaMaskSVG />;
     }
   }
 };
 
 const Header: FC = observer(() => {
-  const { user } = useMst();
+  const { address, provider, isOwner } = useMst().user;
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -46,10 +46,10 @@ const Header: FC = observer(() => {
   }, [openModal]);
 
   useEffect(() => {
-    if (user.address) {
+    if (address) {
       closeModal('chooseWallet');
     }
-  }, [user.address]);
+  }, [address]);
 
   const links = useMemo(
     () => [
@@ -58,13 +58,12 @@ const Header: FC = observer(() => {
     ],
     [],
   );
-
   return (
     <div className={s.header_wrapper}>
       <div className={s.logo}>
         <img src={logo} alt="logo" />
       </div>
-      {user.isOwner && (
+      {isOwner && (
         <div className={s.linkWrapper}>
           {links.map((l) => (
             <NavLink
@@ -77,16 +76,16 @@ const Header: FC = observer(() => {
           ))}
         </div>
       )}
-      {user.address ? (
+      {address ? (
         <div className={s.connectWrapper}>
           <Button className={s.btn_connected} onClick={openAddress}>
             <div className={s.icon}>
               {getIcon(
-                (user.provider || localStorage.getItem('bandmusic-wallet')) as TAvailableProviders,
+                (provider || localStorage.getItem('bandmusic-wallet')) as TAvailableProviders,
               )}
             </div>
-            <div className={s.text}>{splitAddress(user.address, 22, 3)}</div>
-            <div className={s.mobileText}>{splitAddress(user.address, 10, 3)}</div>
+            <div className={s.text}>{splitAddress(address, 22, 3)}</div>
+            <div className={s.mobileText}>{splitAddress(address, 10, 3)}</div>
           </Button>
         </div>
       ) : (

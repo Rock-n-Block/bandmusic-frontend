@@ -18,7 +18,7 @@ const parseCSV = (csv: string[]) => {
         errs.push(`error address at line ${key + 1}\n${address}`);
         return;
       }
-      if (Number.isNaN(new Date(timestamp))) {
+      if (Number.isNaN(new Date(timestamp).getTime())) {
         errs.push(`error date at line ${key + 1}\n${data}`);
         return;
       }
@@ -50,6 +50,7 @@ const parseCSV = (csv: string[]) => {
       }
     }
   });
+  console.log(errs);
   return { data, errs };
 };
 

@@ -127,6 +127,11 @@
 
 @media screen and (max-width: 541px) {
   .header_wrapper {
+    .btn{
+      margin-top: 10px;
+      width: 100%;
+      padding: 24px 0;
+    }
     .connectWrapper{
       .btn_connected{
         .icon{

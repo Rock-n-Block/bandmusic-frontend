@@ -91,3 +91,13 @@
     }
   }
 }
+
+@media screen and (max-width: 541px) {
+  .home_wrapper{
+    .title{
+      span{
+        display: block;
+      }
+    }
+  }
+}

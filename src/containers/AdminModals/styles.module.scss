@@ -1,9 +1,10 @@
 @import '/src/styles/mixins/helpers.scss';
 @import '/src/styles/variables';
 
-.modalWrapper{
+.modalWrapper {
   min-width: 415px;
   border-radius: 12px;
+  background: transparent;
 }
 
 .wrapper {
@@ -32,12 +33,12 @@
     border: none;
   }
 
-  .status{
-    .warn{
-      &Wrapper{
+  .status {
+    .warn {
+      &Wrapper {
         @include flex(column, center, center, nowrap);
       }
-      &Title{
+      &Title {
         font-weight: 800;
         color: $gray;
         margin-top: 15px;

@@ -20,7 +20,8 @@ const Home: FC = observer(() => {
   return (
     <div className={cn(s.home_wrapper, { [s.vesting]: vesting })}>
       <h1 className={s.title}>
-        $RYLT Token <span>Holders Mint</span> Your Tokens Here
+        $RYLT Token <span>Holders {claimerInfo.waiting.length !== 0 ? 'Mint' : 'Access'}</span> Your
+        Tokens Here
       </h1>
       <div className={s.description}>
         Join the only platform that links music fans and artists together through music NFTs,

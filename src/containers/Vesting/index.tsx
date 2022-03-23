@@ -62,9 +62,13 @@ const Vesting: FC = observer(() => {
             tx_hash: transaction.transactionHash,
           }));
           openModal('successClaimed');
-          await vesting.update_status(data);
-          await getBalance(address, isOwner);
-          await fetchUserData(address, isOwner);
+          try{
+            await vesting.update_status(data);
+            await getBalance(address, isOwner);
+            await fetchUserData(address, isOwner);
+          } catch(e){
+            console.error(e);
+          }
         }
         setInProcess(removedProcesses);
         setCanClaim(canClaimUpdated);

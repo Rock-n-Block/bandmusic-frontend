@@ -125,13 +125,6 @@ export default [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: '_vesting', type: 'address' }],
-    name: 'grantMinter',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'bytes32', name: 'role', type: 'bytes32' },
       { internalType: 'address', name: 'account', type: 'address' },

@@ -75,7 +75,7 @@ export const contracts: IContracts = {
   params: {
     VESTING: {
       mainnet: {
-        address: '0xF43D6b0c53e7Ec72593dDA2441C38525d0E759a8',
+        address: '0xF250357B9dB9748555daa5c4617Ff5fc186E2003',
         abi: VestingAbi,
       },
       testnet: {
@@ -85,7 +85,7 @@ export const contracts: IContracts = {
     },
     TOKEN: {
       mainnet: {
-        address: '0x3049a000BC6D0403623516e44bC47BA381dB5797',
+        address: '0x56ff962f6eD95Db6fee659Abca15d183527405E4',
         abi: TokenAbi,
       },
       testnet: {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { isProduction } from '@/config';
 
 const baseURI = isProduction
-  ? 'https://bandmusic.rocknblock.io/api/v1/'
+  ? 'https://rylt.io/api/v1/'
   : 'https://bandmusic.rocknblock.io/api/v1/';
 
 const api = axios.create({

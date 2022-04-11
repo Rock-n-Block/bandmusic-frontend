@@ -33,7 +33,7 @@ const getIcon = (provider: TAvailableProviders) => {
 };
 
 const Header: FC = observer(() => {
-  const { address, provider, isOwner } = useMst().user;
+  const { address, provider, isOwner, balance } = useMst().user;
 
   const { openModal, closeModal, isOpen } = useModal();
 
@@ -60,9 +60,9 @@ const Header: FC = observer(() => {
   );
   return (
     <div className={s.header_wrapper}>
-      <div className={s.logo}>
+      <NavLink to="/" className={s.logo}>
         <img src={logo} alt="logo" />
-      </div>
+      </NavLink>
       {isOwner && (
         <div className={s.linkWrapper}>
           {links.map((l) => (
@@ -78,14 +78,19 @@ const Header: FC = observer(() => {
       )}
       {address ? (
         <div className={s.connectWrapper}>
+          <Button className={s.balanceBlock}>
+            <span className={s.balance}>
+              <span className={s.balanceTitle}>Balance:</span> {balance} RYLT
+            </span>
+          </Button>
           <Button className={s.btn_connected} onClick={openAddress}>
             <div className={s.icon}>
               {getIcon(
                 (provider || localStorage.getItem('bandmusic-wallet')) as TAvailableProviders,
               )}
             </div>
-            <div className={s.text}>{splitAddress(address, 22, 3)}</div>
-            <div className={s.mobileText}>{splitAddress(address, 10, 3)}</div>
+            <div className={s.text}>{splitAddress(address, 9, 3)}</div>
+            <div className={s.mobileText}>{splitAddress(address, 13, 5)}</div>
           </Button>
         </div>
       ) : (

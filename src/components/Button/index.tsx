@@ -49,7 +49,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
         rel="noreferrer"
         style={style}
       >
-        {isLoading ? <Loader /> : children}
+        {isLoading ? <Loader className={s.loader} /> : children}
       </a>
     );
   if (route)
@@ -61,7 +61,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
         })}
         style={style}
       >
-        {isLoading ? <Loader /> : children}
+        {isLoading ? <Loader className={s.loader} /> : children}
       </Link>
     );
   return (
@@ -77,7 +77,7 @@ const Button: FC<PropsWithChildren<IButton>> = ({
       onMouseEnter={onMouseOver}
       style={style}
     >
-      {isLoading ? <Loader /> : children}
+      {isLoading ? <Loader className={s.loader} /> : children}
     </button>
   );
 };

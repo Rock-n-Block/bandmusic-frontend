@@ -7,10 +7,18 @@ import { Button } from '@/components';
 import { SuccessModal, Timer } from '@/containers';
 import { useContractContext, useModal, useWalletContext } from '@/context';
 import { useMst } from '@/store';
-import { SingleClaim } from '@/store/Models/Claimer';
-import { formatNumber } from '@/utils';
+import { SingleClaim, TDataType } from '@/store/Models/Claimer';
+import { formatNumber, normalizedValue } from '@/utils';
 
 import s from './Vesting.module.scss';
+
+const calcFinalResult = (confirmed: TDataType, pending: TDataType, waiting: TDataType) => {
+  let finalResult = 0;
+  finalResult += confirmed.reduce((f, c) => f + +normalizedValue(c.amount), 0);
+  finalResult += pending.reduce((f, p) => f + +normalizedValue(p.amount), 0);
+  finalResult += waiting.reduce((f, w) => f + +normalizedValue(w.amount), 0);
+  return finalResult;
+};
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
@@ -62,11 +70,11 @@ const Vesting: FC = observer(() => {
             tx_hash: transaction.transactionHash,
           }));
           openModal('successClaimed');
-          try{
+          try {
             await vesting.update_status(data);
             await getBalance(address, isOwner);
             await fetchUserData(address, isOwner);
-          } catch(e){
+          } catch (e) {
             console.error(e);
           }
         }
@@ -79,7 +87,17 @@ const Vesting: FC = observer(() => {
         return false;
       }
     },
-    [address, canClaim, claimTokens, fetchUserData, getBalance, inProcess, isOwner, modal, openModal],
+    [
+      address,
+      canClaim,
+      claimTokens,
+      fetchUserData,
+      getBalance,
+      inProcess,
+      isOwner,
+      modal,
+      openModal,
+    ],
   );
 
   const isDisabled = useCallback(
@@ -127,14 +145,15 @@ const Vesting: FC = observer(() => {
 
   return (
     <div className={s.vesting_wrapper}>
-      <div className={s.balance}>Your current balance:</div>
+      <div className={s.balance}>Final return</div>
 
       <div className={s.count}>
-        {formatNumber(new BigNumber(balance).toString(), 'compact')}
+        {formatNumber(
+          new BigNumber(calcFinalResult(confirmed, pending, waiting)).toString(),
+          'compact',
+        )}
         <span>RYLT</span>
       </div>
-
-      <div className={s.timer_tracking}>Timer Tracking</div>
 
       {isClaimAllActive && (
         <div className={s.claim}>
@@ -150,11 +169,17 @@ const Vesting: FC = observer(() => {
         </div>
       )}
 
+      <div className={s.timer_tracking}>Timer Tracking</div>
+
       <div className={s.stages}>
         {confirmed.map((stage) => (
           <div key={stage.idx} className={s.stage}>
+            <span className={s.mobileLabel}>Stage</span>
             <div className={s.stage_number}>{stage.stage} stage</div>
+            <span className={s.mobileLabel}>Timer</span>
             <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
+            <span className={s.mobileLabel}>Amount</span>
+            <span>{formatNumber(normalizedValue(stage.amount).toString(), 'compact')} $RYLT</span>
             <Button size="sm" className={s.stage_btn} color="filled" disabled>
               Claimed
             </Button>
@@ -162,12 +187,16 @@ const Vesting: FC = observer(() => {
         ))}
         {pending.map((stage) => (
           <div key={stage.idx} className={s.stage}>
+            <span className={s.mobileLabel}>Stage</span>
             <div className={s.stage_number}>{stage.stage} stage</div>
+            <span className={s.mobileLabel}>Timer</span>
             <Timer
               className={s.stage_timer}
               deadline={stage.timestamp * 1000}
               onTimerEnd={onTimerEnd(stage)}
             />
+            <span className={s.mobileLabel}>Amount</span>
+            <span>{formatNumber(normalizedValue(stage.amount).toString(), 'compact')} $RYLT</span>
             <Button size="sm" className={s.stage_btn} color="filled" disabled isLoading>
               Claimed
             </Button>
@@ -175,8 +204,16 @@ const Vesting: FC = observer(() => {
         ))}
         {waiting.map((stage) => (
           <div key={stage.idx} className={s.stage}>
+            <span className={s.mobileLabel}>Stage</span>
             <div className={s.stage_number}>{stage.stage} stage</div>
-            <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
+            <span className={s.mobileLabel}>Timer</span>
+            <Timer
+              className={s.stage_timer}
+              deadline={stage.timestamp * 1000}
+              onTimerEnd={onTimerEnd(stage)}
+            />
+            <span className={s.mobileLabel}>Amount</span>
+            <span>{formatNumber(normalizedValue(stage.amount).toString(), 'compact')} $RYLT</span>
             <Button
               size="sm"
               className={s.stage_btn}

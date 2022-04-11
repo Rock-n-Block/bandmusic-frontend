@@ -15,7 +15,7 @@
   .count {
     @include h1;
     font-weight: 300;
-    margin-bottom: 42px;
+    margin-bottom: 30px;
     span {
       margin-left: 5px;
       font-size: 32px;
@@ -29,19 +29,20 @@
     margin-bottom: 42px;
   }
 
-  .balance{
+  .balance {
     font-weight: 300;
     font-size: 24px;
     line-height: 29px;
     margin-bottom: 22px;
+    color: $gray-color-2;
+    opacity: 0.7;
   }
 
   .claim {
-    padding: 0 25px;
-    width: 100%;
     &_all {
       width: 100%;
-      margin-bottom: 20px;
+      padding: 6px 25px;
+      margin-bottom: 22px;
     }
   }
 
@@ -63,13 +64,18 @@
         margin-bottom: 0;
       }
       @include flex(row, center, space-between, nowrap);
-      font-size: 24px;
-      line-height: 29px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 17px;
+      .mobileLabel{
+        display: none;
+      }
       &_btn {
-        font-weight: 500;
-        font-size: 24px;
-        line-height: 29px;
-        flex: 0 0 125px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 17px;
+        flex: 0 0 auto;
+        padding: 6px 24px;
         @include ellipsis;
       }
     }
@@ -81,8 +87,17 @@
     padding: 48px 0 34px;
     min-width: 100%;
     flex: 0 0 100%;
+    padding: 0;
+    border: 0px solid transparent;
+    background: transparent;
+    .balance {
+      font-size: 20px;
+      line-height: 24px;
+      margin-bottom: 16px;
+    }
     .count {
-      margin-bottom: 30px;
+      margin-bottom: 16px;
+      font-weight: 300;
       font-size: 48px;
       line-height: 58px;
     }
@@ -94,15 +109,31 @@
       padding: 0 18px;
     }
     .stages {
-      padding: 0 18px;
       .stage {
         font-size: 16px;
         line-height: 19px;
+        padding: 20px 30px;
+        width: 100%;
+        @include flex(column, flex-start, flex-start);
         &_btn {
+          margin-top: 16px;
           font-size: 16px;
           line-height: 19px;
           padding: 9px 20px;
-          flex: 0 0 100px;
+          flex: 0 0 auto;
+          width: 100%;
+        }
+        &_number{
+          margin-bottom: 16px;
+        }
+        &_timer{
+          margin-bottom: 16px;
+        }
+        .mobileLabel{
+          color: $gray-color-2;
+          opacity: 0.5;
+          display: inline-block;
+          margin-bottom: 4px;
         }
       }
     }

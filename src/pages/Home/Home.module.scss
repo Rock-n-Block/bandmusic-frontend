@@ -50,24 +50,25 @@
     }
   }
   .home_img {
-    max-width: 529px;
+    max-width: 554px;
   }
 }
 
 @media (max-width: 1025px) {
   .home_wrapper {
     grid-template-columns: 1fr;
-    grid-template-rows: 0.2fr 1fr 0.4fr;
+    grid-template-rows: 0.2fr 0.2fr 1fr;
     grid-template-areas:
       'title'
-      'content-block'
-      'info';
+      'info'
+      'content-block';
     &.vesting {
-      grid-template-rows: 0.2fr 1.2fr 0.4fr;
+      grid-template-rows: 0.2fr 0.2fr 1.2fr;
     }
     .description {
       margin-top: 20px;
       max-width: max-content;
+      margin-bottom: 0px;
     }
     .home_img {
       max-width: 100%;
@@ -93,10 +94,25 @@
 }
 
 @media screen and (max-width: 541px) {
-  .home_wrapper{
-    .title{
-      span{
-        display: block;
+  .home_wrapper {
+    .title {
+      text-align: center;
+      font-size: 36px;
+      line-height: 44px;
+      span {
+        display: inline-block;
+      }
+    }
+    .description {
+      text-align: center;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .btns {
+      margin-top: 20px;
+      .btn {
+        width: auto;
+        padding: 14px 16px;
       }
     }
   }

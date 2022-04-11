@@ -7,10 +7,18 @@ import { Button } from '@/components';
 import { SuccessModal, Timer } from '@/containers';
 import { useContractContext, useModal, useWalletContext } from '@/context';
 import { useMst } from '@/store';
-import { SingleClaim } from '@/store/Models/Claimer';
+import { SingleClaim, TDataType } from '@/store/Models/Claimer';
 import { formatNumber, normalizedValue } from '@/utils';
 
 import s from './Vesting.module.scss';
+
+const calcFinalResult = (confirmed: TDataType, pending: TDataType, waiting: TDataType) => {
+  let finalResult = 0;
+  finalResult += confirmed.reduce((f, c) => f + +normalizedValue(c.amount), 0);
+  finalResult += pending.reduce((f, p) => f + +normalizedValue(p.amount), 0);
+  finalResult += waiting.reduce((f, w) => f + +normalizedValue(w.amount), 0);
+  return finalResult;
+};
 
 const Vesting: FC = observer(() => {
   const { waiting, confirmed, pending } = useMst().claimerInfo;
@@ -140,7 +148,10 @@ const Vesting: FC = observer(() => {
       <div className={s.balance}>Final return</div>
 
       <div className={s.count}>
-        {formatNumber(new BigNumber(balance).toString(), 'compact')}
+        {formatNumber(
+          new BigNumber(calcFinalResult(confirmed, pending, waiting)).toString(),
+          'compact',
+        )}
         <span>RYLT</span>
       </div>
 

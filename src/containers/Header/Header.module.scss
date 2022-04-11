@@ -7,8 +7,8 @@
   .logo {
     max-width: 131px;
   }
-  .link{
-    &Wrapper{
+  .link {
+    &Wrapper {
       @include flex(row, center, flex-end);
       margin-left: auto;
     }
@@ -21,7 +21,7 @@
     position: relative;
     overflow: hidden;
     @include transition;
-    &:after{
+    &:after {
       position: absolute;
       content: '';
       bottom: 0;
@@ -32,16 +32,18 @@
       transform: translateY(2px);
       @include transition;
     }
-    &.active{
+    &.active {
       color: rgba($color-accent, 0.9);
-      &:after{
+      &:after {
         transform: translateY(0);
       }
     }
   }
-  .connectWrapper{
+  .connectWrapper {
     position: relative;
-    .disconnect{
+    width: 554px;
+    @include flex(row, center, space-between, nowrap);
+    .disconnect {
       position: absolute;
       top: calc(100% + 10px);
       left: 0;
@@ -49,8 +51,20 @@
       max-height: 0;
       overflow: hidden;
       @include transition;
-      &.active{
+      &.active {
         max-height: 200px;
+      }
+    }
+    .balance {
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
+      &Block {
+        padding: 24px 33px;
+        flex: 0 0 50%;
+      }
+      &Title {
+        color: $gray-color;
       }
     }
   }
@@ -61,7 +75,7 @@
     letter-spacing: 0.015em;
     text-transform: uppercase;
     color: $text-btn-color-white;
-    &_disconnected{
+    &_disconnected {
       padding: 24px 167px;
       font-size: 20px;
       letter-spacing: 0.015em;
@@ -70,55 +84,81 @@
     }
   }
   .btn_connected {
-    min-width: 529px;
-    padding: 12px 18px;
+    padding: 12px 18px 12px 10px;
     @include flex(row, center, flex-start, nowrap);
     .icon {
       width: 53px;
       height: 48px;
-      margin-right: 24px;
+      margin-right: 18px;
       @include flex(row, center, center);
       img {
         width: 100%;
       }
     }
     .text {
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 29px;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
       text-transform: none;
     }
-    .mobileText{
+    .mobileText {
       display: none;
-      font-weight: 500;
-      font-size: 24px;
-      line-height: 29px;
+      font-weight: 400;
+      font-size: 20px;
+      line-height: 24px;
       text-transform: none;
     }
   }
 }
 
-@media (max-width: 830px){
-  .header_wrapper{
+@media (max-width: 1024px) {
+  .header_wrapper {
+    .connectWrapper {
+      .balance {
+        &Block {
+          flex: 0 0 auto;
+          padding: 24px 20px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 830px) {
+  .header_wrapper {
     @include flex(column, center, flex-start, nowrap);
-    .link{
-      &Wrapper{
+    .link {
+      &Wrapper {
         margin: 10px 0;
         @include flex(row, center, flex-end);
         margin-left: 0;
       }
       margin-right: 0;
-      &:not(:last-child){
+      &:not(:last-child) {
         margin-right: 40px;
       }
     }
-    .btn_connected{
+    .connectWrapper{
+      width: 100%;
+      @include flex(column-reverse, center, flex-start, nowrap);
+      .balance{
+        &Block{
+          width: 100%;
+        }
+      }
+      .btn_connected{
+        width: 100%;
+        margin-bottom: 16px;
+        @include flex(row, center, center, nowrap);
+      }
+    }
+    .btn_connected {
       margin-top: 20px;
       min-width: 0;
-      .text{
+      .text {
         display: none;
       }
-      .mobileText{
+      .mobileText {
         display: inline-block;
       }
     }
@@ -127,14 +167,14 @@
 
 @media screen and (max-width: 541px) {
   .header_wrapper {
-    .btn{
+    .btn {
       margin-top: 10px;
       width: 100%;
       padding: 24px 0;
     }
-    .connectWrapper{
-      .btn_connected{
-        .icon{
+    .connectWrapper {
+      .btn_connected {
+        .icon {
           margin-right: 12px;
         }
       }
@@ -142,27 +182,27 @@
   }
 }
 
-@media (max-width: 830px){
-  .header_wrapper{
+@media (max-width: 830px) {
+  .header_wrapper {
     @include flex(column, center, flex-start, nowrap);
-    .link{
-      &Wrapper{
+    .link {
+      &Wrapper {
         margin: 10px 0;
         @include flex(row, center, flex-end);
         margin-left: 0;
       }
       margin-right: 0;
-      &:not(:last-child){
+      &:not(:last-child) {
         margin-right: 40px;
       }
     }
-    .btn_connected{
+    .btn_connected {
       margin-top: 20px;
       min-width: 0;
-      .text{
+      .text {
         display: none;
       }
-      .mobileText{
+      .mobileText {
         display: inline-block;
       }
     }

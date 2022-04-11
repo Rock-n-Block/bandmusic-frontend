@@ -12,7 +12,7 @@ import { useContractContext, useModal } from '.';
 
 const WalletContext = createContext<IWalletConnectContext>({} as IWalletConnectContext);
 const wcService = WalletService;
-const tokenLifeTime = 1000 * 60 * 60 * 12;
+const tokenLifeTime = 60 * 60 * 12;
 
 type TClaimResponseClaim = {
   token_amount: string;

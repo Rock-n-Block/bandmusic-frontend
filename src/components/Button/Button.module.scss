@@ -14,6 +14,10 @@
   overflow: hidden;
   @include transition;
 
+  .loader{
+    max-width: 35px;
+  }
+
   &.default {
     background: $bg-btn-default;
     border-radius: 18px;

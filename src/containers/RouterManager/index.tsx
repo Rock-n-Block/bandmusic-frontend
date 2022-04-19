@@ -3,9 +3,17 @@ import { Route, Routes } from 'react-router-dom';
 
 import { routes } from '@/router';
 
+import { GuardRoute } from '..';
+
 const RouteManager: FC = () => {
   const router = routes.map((route) => {
-    return <Route path={route.path} element={route.component} key={route.name} />;
+    return (
+      <Route
+        key={route.name}
+        path={route.path}
+        element={<GuardRoute require={route.require}>{route.component}</GuardRoute>}
+      />
+    );
   });
   return <Routes>{router}</Routes>;
 };

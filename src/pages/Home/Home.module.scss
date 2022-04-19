@@ -2,4 +2,118 @@
 @import '@/styles/mixins';
 
 .home_wrapper {
+  padding-top: 20px;
+  padding-bottom: 58px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 0.7fr 1.3fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    'title content-block'
+    'info content-block';
+
+  .title {
+    @include h1;
+    grid-area: title;
+    span {
+      color: $color-accent;
+    }
+  }
+  .description {
+    font-size: 16px;
+    line-height: 24px;
+    max-width: 492px;
+    margin-top: 32px;
+    margin-bottom: 38px;
+    grid-area: info;
+  }
+  .content {
+    grid-area: content-block;
+    display: grid;
+    justify-content: flex-end;
+    padding-left: 20px;
+  }
+  .btns {
+    margin-top: 50px;
+  }
+  .btn {
+    width: 419px;
+    padding: 23px 54px 24px;
+    color: $color-another-interesting-white-color;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 500;
+    &:first-of-type {
+      margin-bottom: 28px;
+      padding: 25px 54px 26px;
+    }
+  }
+  .home_img {
+    max-width: 554px;
+  }
+}
+
+@media (max-width: 1025px) {
+  .home_wrapper {
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 0.2fr 1fr;
+    grid-template-areas:
+      'title'
+      'info'
+      'content-block';
+    &.vesting {
+      grid-template-rows: 0.2fr 0.2fr 1.2fr;
+    }
+    .description {
+      margin-top: 20px;
+      max-width: max-content;
+      margin-bottom: 0px;
+    }
+    .home_img {
+      max-width: 100%;
+    }
+    .content {
+      margin-top: 20px;
+      @include flex(row, center, center, nowrap);
+      padding-left: 0;
+    }
+    .btns {
+      @include flex(column, center, center, nowrap);
+    }
+    .btn {
+      width: 100%;
+      font-size: 20px;
+      line-height: 24px;
+      padding: 20px 54px;
+      &:first-of-type {
+        padding: 26px 32px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 541px) {
+  .home_wrapper {
+    .title {
+      text-align: center;
+      font-size: 36px;
+      line-height: 44px;
+      span {
+        display: inline-block;
+      }
+    }
+    .description {
+      text-align: center;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .btns {
+      margin-top: 20px;
+      .btn {
+        width: auto;
+        padding: 14px 16px;
+      }
+    }
+  }
 }

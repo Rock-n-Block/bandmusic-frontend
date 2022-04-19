@@ -2,10 +2,13 @@ import { CSSProperties, FC, PropsWithChildren, RefObject, SyntheticEvent } from 
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
+import { Loader } from '..';
+
 import s from './Button.module.scss';
 
 export interface IButton {
-  color?: 'filled' | 'accent' | 'disabled';
+  color?: 'default' | 'filled' | 'outline' | 'disabled' | 'underline';
+  size?: 'lg' | 'sm';
   className?: string;
   onClick?: (event: never) => void;
   type?: 'button' | 'submit';
@@ -14,45 +17,67 @@ export interface IButton {
   onMouseOver?: (event: SyntheticEvent) => void;
   style?: CSSProperties;
   href?: string;
+  route?: string;
   btnRef?: RefObject<HTMLButtonElement>;
+  isLoading?: boolean;
 }
 
 const Button: FC<PropsWithChildren<IButton>> = ({
-  color = '',
+  color = 'default',
+  size = 'lg',
   onClick = () => {},
   className,
   type = 'button',
   children,
   disabled,
   href,
+  route,
   btnRef,
   onMouseLeave,
   onMouseOver = () => {},
+  isLoading = false,
+  style,
 }) => {
   if (href)
     return (
-      <Link
-        to={href}
-        className={cn(s.button, s[color], className, {
+      <a
+        href={href}
+        target="_blank"
+        className={cn(className, s.button, s[color], {
           [s.disabled]: disabled || color === 'disabled',
         })}
+        rel="noreferrer"
+        style={style}
       >
-        {children}
+        {isLoading ? <Loader className={s.loader} /> : children}
+      </a>
+    );
+  if (route)
+    return (
+      <Link
+        to={route}
+        className={cn(className, s.button, s[color], {
+          [s.disabled]: disabled || color === 'disabled',
+        })}
+        style={style}
+      >
+        {isLoading ? <Loader className={s.loader} /> : children}
       </Link>
     );
   return (
     <button
       ref={btnRef}
       type={type === 'submit' ? 'submit' : 'button'}
-      className={cn(s.button, s[color], className, {
+      className={cn(s.button, s[color], s[size], className, {
         [s.disabled]: disabled || color === 'disabled',
       })}
       onClick={onClick}
       disabled={disabled}
       onMouseLeave={onMouseLeave}
       onMouseEnter={onMouseOver}
+      style={style}
     >
-      {children}
+      {isLoading ? <Loader className={s.loader} /> : children}
     </button>
   );
 };

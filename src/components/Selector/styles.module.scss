@@ -1,0 +1,65 @@
+@import '/src/styles/mixins/helpers.scss';
+
+.selector {
+  position: relative;
+  width: fit-content;
+  z-index: 1;
+  &Head {
+    min-width: 250px;
+    background: transparent;
+    appearance: none;
+    color: $text-color;
+    padding: 10px 15px;
+    border: 1px solid $text-color;
+    border-radius: 18px;
+  }
+
+  &Body {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: auto;
+    max-height: 0;
+    overflow: hidden;
+    border-radius: 18px;
+    background-color: rgba($btn-color, 0.4);
+    backdrop-filter: blur(16px);
+    @include transition;
+    @include flex(column, center, flex-start, nowrap);
+    &.active {
+      max-height: 1000px;
+    }
+  }
+  &Option {
+    width: 100%;
+    background: transparent;
+    appearance: none;
+    border: 0px solid transparent;
+    padding: 10px 15px;
+    color: $text-color;
+    @include transition;
+    &:hover {
+      background: rgba($btn-color, 0.4);
+    }
+    &.selected {
+      background: rgba($btn-color, 0.4);
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include s{
+  .selector{
+    width: 100%;
+    &Head{
+      min-width: 100%;
+    }
+    &Body{
+      background-color: $admin-modal-background;
+    }
+    &Option{
+      color: $gray;
+    }
+  }
+}

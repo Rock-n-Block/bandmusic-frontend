@@ -1,0 +1,7 @@
+@import '@/styles/mixins';
+@import '@/styles/variables';
+
+.timer_wrapper {
+  @include flex(row, center);
+
+}

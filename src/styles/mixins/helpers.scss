@@ -1,4 +1,5 @@
 @import 'media';
+@import 'global.scss';
 
 @mixin font-face($font-family, $file-path, $weight: normal, $style: normal, $format: 'woff') {
   @font-face {
@@ -37,4 +38,19 @@
   font-size: $size;
   font-weight: $weight;
   line-height: $height;
+}
+
+$transition-duration: .3s;
+$transition-timing-function: ease;
+$transition-delay: 0s;
+
+@mixin transition($duration: $transition-duration, $function: $transition-timing-function, $delay: $transition-delay, $property: all){
+  transition: $property $duration $function $delay;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }

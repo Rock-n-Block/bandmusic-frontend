@@ -1,15 +1,32 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { observer } from 'mobx-react-lite';
 
-import { Header, RouterManager } from '@/containers';
+import { AdminModal, Header, RouterManager } from '@/containers';
 
-const App: FC = () => {
+import { useMst } from './store';
+
+const App: FC = observer(() => {
+  const { address } = useMst().user;
+  const navigator = useNavigate();
+  useEffect(() => {
+    if (address.length === 0) {
+      navigator('/');
+    }
+  }, [address.length, navigator]);
   return (
-    <div className="main_wrapper">
-      <div className="page_wrapper">
-        <Header />
-        <RouterManager />
+    <>
+      <AdminModal />
+      <div className="main_wrapper">
+        <div className="bg_wrapper">
+          <div className="bg_ellipses" />
+        </div>
+        <div className="page_wrapper">
+          <Header />
+          <RouterManager />
+        </div>
       </div>
-    </div>
+    </>
   );
-};
+});
 export default App;

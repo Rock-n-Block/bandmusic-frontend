@@ -1,0 +1,39 @@
+@import '/src/styles/mixins/helpers.scss';
+
+.input{
+    position: relative;
+    &Label{
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(15px, calc(50% - 5px));
+        font-size: 16px;
+        line-height: 24px;
+        color: rgba($text-color, 0.7);
+        @include transition;
+        &.active{
+            color: rgba($text-color, 1);
+            transform: translate(0px, -100%);
+        }
+        &.disabled{
+            pointer-events: none;
+        }
+    }
+    &Main{
+        padding: 10px 15px;
+        background: transparent;
+        border: 0px solid transparent;
+        border-bottom: 1px solid $color-accent;
+        color: $text-color;
+        font-size: 16px;
+        line-height: 24px;
+        width: 100%;
+        @include transition;
+        &:focus{
+            border-bottom: 1px solid $bg-btn-filled-hover;
+        }
+        &.disabled{
+            pointer-events: none;
+        }
+    }
+}

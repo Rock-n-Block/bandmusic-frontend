@@ -145,14 +145,29 @@ const Vesting: FC = observer(() => {
 
   return (
     <div className={s.vesting_wrapper}>
-      <div className={s.balance}>Final return</div>
+      <div className={s.vesting_stats}>
+        <div className={s.vesting_single_stat}>
+          <div className={s.balance}>Final return</div>
 
-      <div className={s.count}>
-        {formatNumber(
-          new BigNumber(calcFinalResult(confirmed, pending, waiting)).toString(),
-          'compact',
-        )}
-        <span>RYLT</span>
+          <div className={s.count}>
+            {formatNumber(
+              new BigNumber(calcFinalResult(confirmed, pending, waiting)).toString(),
+              'compact',
+            )}
+            <span>RYLT</span>
+          </div>
+        </div>
+        <div className={s.vesting_single_stat}>
+          <div className={s.balance}>Left to return</div>
+
+          <div className={s.count}>
+            {formatNumber(
+              new BigNumber(calcFinalResult([] as any, pending, waiting)).toString(),
+              'compact',
+            )}
+            <span>RYLT</span>
+          </div>
+        </div>
       </div>
 
       {isClaimAllActive && (
@@ -174,8 +189,8 @@ const Vesting: FC = observer(() => {
       <div className={s.stages}>
         {confirmed.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <span className={s.mobileLabel}>Stage</span>
-            <div className={s.stage_number}>{stage.stage} stage</div>
+            <span className={s.mobileLabel}>Month</span>
+            <div className={s.stage_number}>{stage.stage} Month</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
             <span className={s.mobileLabel}>Amount</span>
@@ -187,8 +202,8 @@ const Vesting: FC = observer(() => {
         ))}
         {pending.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <span className={s.mobileLabel}>Stage</span>
-            <div className={s.stage_number}>{stage.stage} stage</div>
+            <span className={s.mobileLabel}>Month</span>
+            <div className={s.stage_number}>{stage.stage} Month</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer
               className={s.stage_timer}
@@ -204,8 +219,8 @@ const Vesting: FC = observer(() => {
         ))}
         {waiting.map((stage) => (
           <div key={stage.idx} className={s.stage}>
-            <span className={s.mobileLabel}>Stage</span>
-            <div className={s.stage_number}>{stage.stage} stage</div>
+            <span className={s.mobileLabel}>Month</span>
+            <div className={s.stage_number}>{stage.stage} Month</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer
               className={s.stage_timer}

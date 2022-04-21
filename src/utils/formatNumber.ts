@@ -18,9 +18,11 @@ const formatNumber = (value: string, format: TFormat = 'withCommas', digits = 2)
         .slice()
         .reverse()
         .find((el) => {
-          return +value >= +el.value;
+          return parseFloat(value) >= +el.value;
         });
-      return item ? (+value / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
+      return item
+        ? (+value / item.value).toFixed(digits).replace(rx, '$1') + item.symbol
+        : parseFloat(value).toFixed(digits);
     }
     default: {
       return value;

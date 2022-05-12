@@ -14,13 +14,18 @@ api.interceptors.request.use(
   (config) => {
     const RawTokenData = localStorage.getItem('bandmusic_token');
     const token = RawTokenData ? JSON.parse(RawTokenData) : null;
+
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     config.headers.common = {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ...config.headers.common,
-      Authorization: `${token ? `Token ${token.token}` : ''}`,
+      Authorization: `${
+        !token || !token.lifetime || new Date(token.lifetime * 1000).getTime() < Date.now()
+          ? `Token ${token.token}`
+          : ''
+      }`,
     };
 
     return config;

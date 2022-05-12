@@ -147,7 +147,7 @@ const Vesting: FC = observer(() => {
     <div className={s.vesting_wrapper}>
       <div className={s.vesting_stats}>
         <div className={s.vesting_single_stat}>
-          <div className={s.balance}>Final return</div>
+          <div className={s.balance}>Total Amount</div>
 
           <div className={s.count}>
             {formatNumber(
@@ -158,7 +158,7 @@ const Vesting: FC = observer(() => {
           </div>
         </div>
         <div className={s.vesting_single_stat}>
-          <div className={s.balance}>Left to return</div>
+          <div className={s.balance}>Total Claimable</div>
 
           <div className={s.count}>
             {formatNumber(
@@ -184,13 +184,13 @@ const Vesting: FC = observer(() => {
         </div>
       )}
 
-      <div className={s.timer_tracking}>Timer Tracking</div>
+      <div className={s.timer_tracking}>RYLT Monthly Schedule</div>
 
       <div className={s.stages}>
         {confirmed.map((stage) => (
           <div key={stage.idx} className={s.stage}>
             <span className={s.mobileLabel}>Month</span>
-            <div className={s.stage_number}>{stage.stage} Month</div>
+            <div className={s.stage_number}>Month {stage.stage}</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer deadline={stage.timestamp * 1000} onTimerEnd={onTimerEnd(stage)} />
             <span className={s.mobileLabel}>Amount</span>
@@ -203,7 +203,7 @@ const Vesting: FC = observer(() => {
         {pending.map((stage) => (
           <div key={stage.idx} className={s.stage}>
             <span className={s.mobileLabel}>Month</span>
-            <div className={s.stage_number}>{stage.stage} Month</div>
+            <div className={s.stage_number}>Month {stage.stage}</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer
               className={s.stage_timer}
@@ -220,7 +220,7 @@ const Vesting: FC = observer(() => {
         {waiting.map((stage) => (
           <div key={stage.idx} className={s.stage}>
             <span className={s.mobileLabel}>Month</span>
-            <div className={s.stage_number}>{stage.stage} Month</div>
+            <div className={s.stage_number}>Month {stage.stage}</div>
             <span className={s.mobileLabel}>Timer</span>
             <Timer
               className={s.stage_timer}

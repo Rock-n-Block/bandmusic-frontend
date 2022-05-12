@@ -21,11 +21,7 @@ api.interceptors.request.use(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       ...config.headers.common,
-      Authorization: `${
-        !token || !token.lifetime || new Date(token.lifetime * 1000).getTime() < Date.now()
-          ? `Token ${token.token}`
-          : ''
-      }`,
+      Authorization: `${token ? `Token ${token.token}` : ''}`,
     };
 
     return config;

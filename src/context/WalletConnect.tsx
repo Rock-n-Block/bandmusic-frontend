@@ -65,8 +65,9 @@ const WalletConnectProvider: FC = ({ children }) => {
       const tokenData = RawTokenData ? JSON.parse(RawTokenData) : null;
       if (
         !tokenData ||
-        !tokenData.lifetime ||
-        new Date(tokenData.lifetime * 1000).getTime() < Date.now()
+        !tokenData?.lifetime ||
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        new Date(tokenData?.lifetime * 1000).getTime() < Date.now()
       ) {
         const msg = await login.getMsg();
         const signedMsg = await wcService.signMsg(address, msg.data);

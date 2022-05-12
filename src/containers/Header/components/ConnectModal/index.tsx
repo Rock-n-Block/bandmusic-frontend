@@ -54,7 +54,7 @@ const ConnectModal: VFC = () => {
           {availableWallets.map((provider) => (
             <Button onClick={handleConnect(provider)} className={s.provider} key={provider}>
               <span className={s.icon}>{getIcon(provider)}</span>
-              <span className={s.icon}>{provider}</span>
+              <span className={s.text}>{provider}</span>
             </Button>
           ))}
         </div>

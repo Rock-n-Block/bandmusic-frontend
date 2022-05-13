@@ -2,7 +2,7 @@ import { chainsEnum, IChainConfig, IConnectWallet, IContracts } from '@/types';
 
 import { TokenAbi, VestingAbi } from './abi';
 
-export const isProduction = true;
+export const isProduction = false;
 
 export const showLogs = false;
 

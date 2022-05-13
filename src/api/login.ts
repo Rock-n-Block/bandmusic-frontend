@@ -11,9 +11,17 @@ export default {
       },
     }),
   login: (address: string, msg: string, signed_msg: string) =>
-    api.post(`${base}metamask_login/`, {
-      address,
-      msg,
-      signed_msg,
-    }),
+    api.post(
+      `${base}metamask_login/`,
+      {
+        address,
+        msg,
+        signed_msg,
+      },
+      {
+        headers: {
+          Authorization: '',
+        },
+      },
+    ),
 };
